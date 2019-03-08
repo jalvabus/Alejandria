@@ -1,0 +1,409 @@
+﻿-- Base de datos del banco
+DROP DATABASE IF EXISTS libreria_puercos_banco;
+CREATE DATABASE libreria_puercos_banco;
+USE libreria_puercos_banco;
+
+create table bancos(
+    id_banco int (30) auto_increment primary key,
+    nombre_banco text
+)engine=innodb;
+
+create table tarjetaCyD(
+    id_tarjetaCyD int(30) auto_increment primary key,
+    id_banco int(30),
+    numero_tarjeta int(30),
+    CCV int(5),
+    vigencia date,
+    saldo decimal(9,2),
+    tipo_tarjetal enum('credito','debito')
+)engine=innodb;
+
+create table movimiento (
+    id_movimiento int(30) auto_increment primary key,
+    movimeinto text,
+    id_tarjetaCyD int(30),
+    monto_pago decimal(9,2)
+)engine=innodb;
+
+alter table movimiento add foreign key(id_tarjetaCyD)references tarjetaCyD(id_tarjetaCyD);
+alter table tarjetaCyD add foreign key(id_banco)references bancos (id_banco);           
+
+-- Base de datos de la libreria
+DROP DATABASE IF EXISTS libreria_puercos;
+CREATE DATABASE libreria_puercos;
+USE libreria_puercos;
+
+create table persona(
+    id_persona int(30) auto_increment  primary key,
+    email text,
+    contraseña text,
+    telefono int(30),
+    direccion text,
+    foto text,
+    nombre text,
+    apellido_paterno text,
+    apellido_materno text
+)engine=innodb;
+
+-- Tabla agregada usuario
+create table usuario(
+    id_usuario int(30) auto_increment primary key,
+    id_persona int(30),
+    usuario text,
+    password text,
+    tipo text
+);
+
+create table premios(
+    id_premio int(30) auto_increment primary key,
+    nombre text,
+    categoria text,
+    stok int(30),
+    descripcion text,
+    imagen text,
+    costo_puntos int(30)
+)engine=innodb;
+
+-- Campo agregado estado_libro 
+-- Cambiado de tabla detalle_wish_list
+create table libro(
+    id_libro int(30) auto_increment primary key,
+    nombre text,
+    isbn text,
+    editorial text,
+    id_autor int(30),
+    descripcion text,
+    costo decimal(9,2),
+    foto text,
+    stok int(30),
+    categoria text,
+    estado_libro text
+)engine=innodb;
+
+create table evento(
+    id_evento int(30) auto_increment primary key,
+    nombre text,
+    lugar text,
+    descripcion text,
+    cupo_limite int(30),
+    cupo_restante int(30)
+)engine=innodb;
+
+create table archivo(
+    id_archivo int(30) auto_increment primary key,
+    archivo text,
+    fecha date,
+    registros_validos text,
+    registros_erroneos text
+)engine=innodb;
+
+create table canjear_premio(
+    id_canjear_premio int(30) auto_increment primary key,
+    id_premio int(30),
+    id_persona int(30),
+    fecha date,
+    cantidad int(30)
+)engine=innodb;
+
+create table wish_list(
+    id_wish_list int(30) auto_increment primary key,
+    id_persona int(30),
+    viegencia date
+)engine=innodb;
+
+-- Campo alterado favorito text - boolean
+-- Campo eliminado estado_libro - cambiado a libro
+create table detalle_wish(
+    id_detalle_wish int(30) auto_increment primary key,
+    id_wish_list int(30),
+    id_libro int(30),
+    favorito boolean
+)engine=innodb;
+
+create table compartir_wish_list(
+    id_compartirWL int(30) auto_increment primary key,
+    id_wish_list int(30),
+    correo text,
+    alias text
+)engine=innodb;
+
+Create table compra_wish_list(
+    id_compraWL int(30) auto_increment primary key,
+    id_wish_list int(30),
+    folio int(30),
+    fecha date
+)engine=innodb;
+
+-- Tabla agregada
+create table detalle_compra_wish_list(
+    id_detalle_compra int(30) primary key auto_increment,
+    id_compraWL int(30),
+    id_libro int(30)
+);
+
+create table autor(
+    id_autor int(30) auto_increment primary key,
+    nonbre text,
+    apellido_paterno text,
+    apellido_materno text,
+    id_libro int(30)
+)engine=innodb;
+
+Create table carrito(
+    id_carrito int(30) auto_increment primary key,
+    costo_total decimal(9,2),
+    articulo text,
+    id_persona int(30)
+)engine=innodb;
+
+create table detalle_carrito(
+    id_detalle_carrito int(30) auto_increment primary key,
+    id_libro int(30),
+    id_carrito int(30)
+)engine=innodb;
+
+Create table compra(
+    id_compra int(30) auto_increment primary key,
+    id_persona int(30),
+    id_carrito int(30),
+    fecha_compra date,
+    total decimal(9,2),
+    tipo text,
+    tipo_pago text,
+    envio text,
+    puntos_adquiridos int(30)
+)engine=innodb;
+
+create table detalle_compra(
+    id_detalle_compra int(30) auto_increment primary key,
+    id_libro int(30),
+    id_compra int(30)
+)engine=innodb;
+
+create table regalo(
+    id_compra_regalo int(30) auto_increment primary key,
+    color text,
+    detalle_tajeta text,
+    id_compra int(30),
+    direccion text
+)engine=innodb;
+
+create table saldo_persona(
+    id_saldo_persona int(30) auto_increment primary key,
+    id_persona int(30),
+    saldo decimal(9,2),
+    puntos double
+)engine=innodb;
+
+create table compra_evento(
+    id_compra_evento int(30) auto_increment primary key,
+    id_evento int(30),
+    id_persona int(30),
+    fecha date,
+    tipo_pago text,
+    pago double,
+    totalPago double,
+    estado text
+)engine=innodb;
+
+create table segundo_pago_evento(
+    id_segundo_pago_evento int(30) auto_increment primary key,
+    id_compra_evento int(30),
+    cantidad double,
+    fecha date
+)engine=innodb;
+
+create table evaluacion(
+    id_evaluacion int(30) auto_increment primary key,
+    id_evento int(30),
+    calificacion int(30),
+    id_persona int,
+    opinion text,
+    id_compra_evento int(30)
+)engine=innodb;
+
+create table sugerencias(
+    id_sugerencias int(30) auto_increment primary key,
+    id_persona int(30),
+    libro text,
+    opinion text
+)engine=innodb;
+
+
+create table evento_Pospuesto(
+    id_EventoPospuesto int(30) auto_increment  primary key,
+    id_evento int,
+    motivo text
+)engine=innodb;
+
+create table tarjeta_prepago(
+    id_tarjeta_prepago int auto_increment  primary key,
+    numero int(16),
+    estado text,
+    saldo double,
+    id_persona int
+)engine=innodb;
+
+
+alter table evento_Pospuesto add foreign key (id_Evento) references evento (id_evento);
+alter table tarjeta_prepago add foreign key (id_persona) references persona (id_persona);
+alter table evento add fecha date;
+alter table evento add precio double;
+alter table evento add foto text;
+alter table canjear_premio add foreign key(id_premio)references premios (id_premio);
+alter table canjear_premio add foreign key(id_persona)references persona (id_persona);
+alter table wish_list  add foreign key(id_persona)references persona (id_persona);
+alter table compra_wish_list add foreign key(id_wish_list)references wish_list (id_wish_list);
+alter table compartir_wish_list add foreign key(id_wish_list)references wish_list (id_wish_list);
+alter table detalle_wish add foreign key(id_wish_list)references wish_list (id_wish_list);
+alter table detalle_wish add foreign key(id_libro)references libro (id_libro);
+alter table carrito add foreign key(id_persona)references persona (id_persona);
+alter table compra add foreign key(id_persona)references persona (id_persona);
+alter table compra add  foreign key(id_carrito)references carrito (id_carrito);
+alter table detalle_carrito add foreign key(id_libro)references libro (id_libro);
+alter table detalle_carrito add foreign key(id_carrito)references carrito (id_carrito);
+alter table detalle_compra add foreign key(id_libro)references libro (id_libro);
+alter table detalle_compra add foreign key(id_compra)references compra (id_compra);
+alter table regalo add foreign key(id_compra)references compra (id_compra);
+alter table saldo_persona add foreign key(id_persona)references persona (id_persona);
+alter table compra_evento add foreign key(id_evento)references evento (id_evento);
+alter table compra_evento add foreign key(id_persona)references persona (id_persona);
+alter table segundo_pago_evento add foreign key(id_compra_evento)references compra_evento (id_compra_evento);
+alter table evaluacion add foreign key(id_evento)references evento (id_evento);
+alter table evaluacion add foreign key(id_persona)references persona (id_persona);
+alter table evaluacion add foreign key(id_compra_evento) references compra_evento (id_compra_evento);
+alter table sugerencias add foreign key (id_persona) references persona (id_persona);
+alter table canjear_premio add foreign key(id_persona) references persona (id_persona);
+alter table libro add foreign key (id_autor) references autor (id_autor);
+alter table autor add foreign key(id_libro)references libro (id_libro);
+
+
+
+
+
+
+
+
+
+
+
+-- Procedimientos almacenados Erik
+
+
+INSERT INTO PERSONA VALUES(null, "erik@gmail.com", "3312", 62679881, "Ecatepec", ".jpg", "erik", "martinez","perez");
+INSERT INTO PERSONA VALUES(null, "ivan@gmail.com", "1234", 55865960, "Tecamac", ".jpg", "ivan", "martinez","perez");
+
+INSERT INTO usuario VALUES(null, 1, "erik@gmail.com", "123", "usuario");
+INSERT INTO usuario VALUES(null, 1, "erik@gmail.com", "123", "usuario");
+
+INSERT INTO persona VALUES(NULL, 1, ".jpg");
+INSERT INTO persona VALUES(NULL, 2, ".jpg");
+
+INSERT INTO saldo_persona VALUES(null, 1, 3000, 10);
+INSERT INTO saldo_persona VALUES(null, 2, 4000, 15);
+
+
+-- Procedimiento almacenado para registrar en eventos
+DROP PROCEDURE IF EXISTS InsEvento;
+DELIMITER //
+CREATE PROCEDURE InsEvento(IN nombre text, IN lugar text, IN descripcion text, IN cupoLim int, IN fechaEv date, IN precio int, IN foto text)
+BEGIN
+INSERT INTO evento VALUES (null, nombre, lugar, descripcion, cupoLim, cupoLim, fechaEv, precio, foto);
+END //
+DELIMITER ;
+call InsEvento("Firma", "UTTEC", "Especial", 300, "2019/02/01", 50, "");
+call InsEvento("Firma2", "UTTEC2", "Fianal", 1, "2019/02/02", 150, "");
+call InsEvento("Firma3", "UTTEC3", "Ultimo", 350, "2019/03/03", 250, "");
+
+-- Procedimiento almacenado para actualizar precio del evento
+DROP PROCEDURE IF EXISTS actPrecioEvt;
+DELIMITER //
+CREATE PROCEDURE actPrecioEvt(IN idEvt int,IN precio double)
+BEGIN
+Update evento
+set precio=precio
+where id_evento=idEvt;
+END //
+DELIMITER ;
+-- call actPrecioEvt(1, 100);
+
+-- Procedimiento almacenado para posponer fecha del evento y escribir motivo
+DROP PROCEDURE IF EXISTS pospEvnto;
+DELIMITER //
+CREATE PROCEDURE pospEvnto(IN idEvt int,IN fechaN date, IN motiv text)
+BEGIN
+Update evento SET fecha=fechaN WHERE id_evento=idEvt;
+INSERT INTO evento_pospuesto VALUES (NULL, idEvt, motiv);
+END //
+DELIMITER ;
+-- call pospEvnto(1, "2019/02/10", "Cancelacion del escritor");
+
+-- Procedimiento almacenado para registro de la tarjeta de prepago
+
+
+-- Procedimiento almacenado para buscar tarjetas de credito
+-- registros de tarjetas:
+
+INSERT INTO tarjeta_prepago VALUES(null, 12345, "disponible", 500, null);
+INSERT INTO tarjeta_prepago VALUES(null, 54321, "disponible", 300, null);
+INSERT INTO tarjeta_prepago VALUES(null, 12332, "disponible", 1000, null);
+INSERT INTO tarjeta_prepago VALUES(null, 11111, "disponible", 500, null);
+INSERT INTO tarjeta_prepago VALUES(null, 22222, "disponible", 300, null);
+INSERT INTO tarjeta_prepago VALUES(null, 33333, "disponible", 1000, null);
+
+DROP PROCEDURE IF EXISTS busqTarjPre;
+DELIMITER //
+CREATE PROCEDURE busqTarjPre(IN num text)
+BEGIN
+SELECT estado FROM tarjeta_prepago WHERE numero = num;
+END //
+DELIMITER ;
+-- call busqTarjPre(12345);
+
+-- Procedimiento almacenado para acumular saldo a la cuenta de persona
+-- INSERT INTO saldo_persona VALUES(NULL, 1, 20, 1);	
+DROP PROCEDURE IF EXISTS acumuSaldo;
+DELIMITER //
+CREATE PROCEDURE acumuSaldo(IN idPersona int,IN num int)
+BEGIN
+SET @max_saldo = (SELECT saldo FROM saldo_persona where id_persona=idPersona);
+SET @saldoTarj = (SELECT saldo FROM tarjeta_prepago where numero=num);
+
+Update saldo_persona SET saldo=(@saldoTarj+@max_saldo) WHERE id_persona=idPersona;
+Update tarjeta_prepago SET estado="Activada", id_persona=idPersona WHERE numero=num;
+END //
+DELIMITER ;
+/*
+SELECT * FROM saldo_persona;
+SELECT * FROM tarjeta_prepago;
+call acumuSaldo(1, 12332);
+SELECT * FROM saldo_persona;
+SELECT * FROM tarjeta_prepago;
+*/
+-- Procedimiento para actualizar el cupo despues de la compra del evento
+/*DROP PROCEDURE IF EXISTS actCupo;
+DELIMITER //
+CREATE PROCEDURE actCupo(IN idEvento int)
+BEGIN
+SET @cupoA = (SELECT cupo_restante FROM evento where id_evento=idEvento);
+Update evento SET cupo_restante=(@cupoA-1) WHERE id_evento=idEvento;
+END //
+DELIMITER ;
+-- call actCupo (1);
+*/
+-- procedimiento para compra de evento
+DROP PROCEDURE IF EXISTS compraEv;
+DELIMITER //
+CREATE PROCEDURE compraEv(IN idEvento int, IN idPersona int,  IN tipoPago text, IN pago double, IN totalPago double)
+BEGIN
+INSERT INTO compra_evento VALUES (null,idEvento, idPersona, now(), tipoPago, pago, totalPago, "Finalizado");
+SET @cupoA = (SELECT cupo_restante FROM evento where id_evento=idEvento);
+Update evento SET cupo_restante=(@cupoA-1) WHERE id_evento=idEvento;
+SET @saldoA = (SELECT saldo FROM saldo_persona where id_persona=idPersona);
+Update saldo_persona SET saldo=(@saldoA-pago) WHERE id_persona=idPersona;
+SET @puntosA = (SELECT puntos FROM saldo_persona where id_persona=idPersona);
+Update saldo_persona SET puntos=((puntos)+(pago/10)) WHERE id_persona=idPersona;
+END //
+DELIMITER ;
+
+-- call compraEv(1, 1, "Saldo", 45, 45);
