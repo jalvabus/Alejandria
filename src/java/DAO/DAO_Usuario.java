@@ -25,7 +25,7 @@ public class DAO_Usuario {
         connection = db_manager.getConnection();
     }
 
-    private Persona getPersonaByID(int id) {
+    public Persona getPersonaByID(int id) {
         try {
             String SQL = "select * from persona where id_persona = " + id + ";";
             PreparedStatement ps = connection.prepareCall(SQL);
@@ -52,7 +52,59 @@ public class DAO_Usuario {
         }
     }
 
-    private Usuario getUser(String user, String pswd) {
+    public Usuario getUserByID(int id_usuario) {
+        try {
+            // Login por usuario
+            String SQL = "select * from usuario where id_usuario = " + id_usuario + ";";
+            System.out.println(SQL);
+            PreparedStatement ps = connection.prepareCall(SQL);
+            ResultSet rs = ps.executeQuery();
+
+            Usuario usuario = new Usuario();
+
+            if (rs.next()) {
+                usuario.setId_Usuario(rs.getInt(1));
+                usuario.setPersona(this.getPersonaByID(rs.getInt(2)));
+                usuario.setUsuario(rs.getString(3));
+                usuario.setPassword(rs.getString(4));
+                usuario.setTipo(rs.getString(5));
+                return usuario;
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            System.out.println("Error $Usuarios > login : " + ex);
+            return null;
+        }
+    }
+    
+     public Usuario getOneByCorreo(String correo) {
+        try {
+            // Login por usuario
+            String SQL = "select * from usuario where usuario = '" + correo + "';";
+            System.out.println(SQL);
+            PreparedStatement ps = connection.prepareCall(SQL);
+            ResultSet rs = ps.executeQuery();
+
+            Usuario usuario = new Usuario();
+
+            if (rs.next()) {
+                usuario.setId_Usuario(rs.getInt(1));
+                usuario.setPersona(this.getPersonaByID(rs.getInt(2)));
+                usuario.setUsuario(rs.getString(3));
+                usuario.setPassword(rs.getString(4));
+                usuario.setTipo(rs.getString(5));
+                return usuario;
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            System.out.println("Error $Usuarios > login : " + ex);
+            return null;
+        }
+    }
+    
+    public Usuario getUser(String user, String pswd) {
         try {
             // Login por usuario
             String SQL = "select * from usuario where usuario = '" + user + "' and password = '" + pswd + "'";

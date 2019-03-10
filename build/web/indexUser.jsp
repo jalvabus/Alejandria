@@ -65,6 +65,7 @@
                     <li><a href="#" onclick="DinamicoDiv('compras');">Compras</a></li>
                     <li><a href="#" onclick="DinamicoDiv('premios');">Premios</a></li>
                     <li><a href="#" onclick="DinamicoDiv('sugerencias');">Sugerencias</a></li>
+                    <li><a href="wishlist.jsp" >Wishlist</a></li>
                     <li><a href="indexGeneral.jsp">Salir</a></li>
                 </ul>
             </div>

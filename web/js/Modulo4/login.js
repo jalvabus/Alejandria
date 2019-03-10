@@ -27,7 +27,7 @@ app.controller('principalLoginController', ($scope, $http) => {
                         location.replace('indexUser.jsp');
                     }
                 } else {
-                    console.log("NO se c")
+                    swal("Error!", "Usuario o contraseña incorrecta", "error");
                 }
             }
         })
