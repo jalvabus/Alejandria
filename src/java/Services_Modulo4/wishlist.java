@@ -23,6 +23,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
+
 /**
  *
  * @author Juan
@@ -30,13 +31,12 @@ import java.util.Properties;
 @WebServlet(name = "wishlist", urlPatterns = {"/wishlist"})
 public class wishlist extends HttpServlet {
 
-
     DAO_Wishlist dao_wishlist = new DAO_Wishlist();
     DAO_Usuario dao_usuario = new DAO_Usuario();
     DAO_Libro dao_libro = new DAO_Libro();
     DAO_Compartir_wishlist dao_compartir_wishlist = new DAO_Compartir_wishlist();
     Usuario usuario;
-    
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -45,25 +45,25 @@ public class wishlist extends HttpServlet {
 
         HttpSession sesion = request.getSession();
         usuario = (Usuario) sesion.getAttribute("user");
-        
+
         if (action.equals("getWishlist")) {
             Wishlist list = dao_wishlist.getWishlistByIDUser(usuario.getId_Usuario());
             Gson gson = new Gson();
             String wl = gson.toJson(list);
             out.print(wl);
         }
-        
+
         if (action.equals("addToWishlist")) {
             Wishlist list = dao_wishlist.getWishlistByIDUser(usuario.getId_Usuario());
             Libro libro = dao_libro.getLibroByID(Integer.parseInt(request.getParameter("id_libro")));
-            
+
             if (dao_wishlist.addToWishlist(list, libro)) {
                 out.print("success");
             } else {
                 out.print("error");
             }
         }
-        
+
         if (action.equals("removeToWishlist")) {
             Wishlist list = dao_wishlist.getWishlistByIDUser(usuario.getId_Usuario());
             Libro libro = dao_libro.getLibroByID(Integer.parseInt(request.getParameter("id_libro")));
@@ -74,19 +74,19 @@ public class wishlist extends HttpServlet {
                 out.print("error");
             }
         }
-        
+
         if (action.equals("updateFavsWishlist")) {
             Wishlist list = dao_wishlist.getWishlistByIDUser(usuario.getId_Usuario());
             Libro libro = dao_libro.getLibroByID(Integer.parseInt(request.getParameter("id_libro")));
             libro.setEstado(request.getParameter("favorito"));
-            
+
             if (dao_wishlist.updateFavsWishlist(list, libro)) {
                 out.print("success");
             } else {
                 out.print("error");
             }
         }
-        
+
         if (action.equals("shareWishlist")) {
             String correo = request.getParameter("correo");
             Usuario usuario_shared = dao_usuario.getOneByCorreo(correo);
@@ -104,30 +104,34 @@ public class wishlist extends HttpServlet {
                         out.print("error");
                     }
                 }
-
             }
         }
-        
-        
-         if (action.equals("getSharedWishlist")) {
+
+        if (action.equals("getSharedWishlist")) {
             ArrayList<Compartir_wishlist> list = dao_compartir_wishlist.getSharedWishlist(usuario.getId_Usuario());
             Gson gson = new Gson();
             String wl = gson.toJson(list);
             out.print(wl);
         }
 
-         /*
-        if (action.equals("SharedWishListByIdUsuario")) {
-            List<Wishlist> list = dao_wishlist.getWishlist(Integer.parseInt(request.getParameter("id_usuario")));
+        if (action.equals("getSharedWishlistByAlias")) {
+            ArrayList<Compartir_wishlist> list = dao_compartir_wishlist.getSharedWishlistAndAlias(usuario.getId_Usuario(), request.getParameter("alias"));
             Gson gson = new Gson();
             String wl = gson.toJson(list);
             out.print(wl);
         }
-        */
         
+        if (action.equals("updateAliasSharedWishlist")) {
+            Compartir_wishlist list = dao_compartir_wishlist.getSharedWishlistByID(Integer.parseInt(request.getParameter("id_compartir")));
+            list.setAlias(request.getParameter("alias"));
+            if (dao_compartir_wishlist.updateAliasWishList(list)) {
+                out.print("success");
+            } else {
+                out.print("error");
+            }
+        }
     }
 
-    
     public boolean sendEmail(String para) {
         boolean enviado = false;
         try {
@@ -196,7 +200,7 @@ public class wishlist extends HttpServlet {
 
         return enviado;
     }
-    
+
     /**
      * Returns a short description of the servlet.
      *

@@ -5,15 +5,19 @@
  */
 package Services_Modulo4;
 
-import DAO.DAO_Libro;
+import DAO.*;
+import Model.*;
+
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -38,11 +42,28 @@ public class libro extends HttpServlet {
         String action = request.getParameter("action");
 
         DAO_Libro $libros = new DAO_Libro();
-        Gson gson = new Gson();
+        DAO_Compra dao_compra = new DAO_Compra();
         
-         if (action.equalsIgnoreCase("getLibros")) {
+        HttpSession sesion = request.getSession();
+        Usuario usuario = (Usuario) sesion.getAttribute("user");
+        
+        Gson gson = new Gson();
+
+        if (action.equalsIgnoreCase("getLibros")) {
             String libros = gson.toJson($libros.getAll());
             out.println(libros);
+        }
+        
+        if (action.equalsIgnoreCase("getLibrosComprados")) {
+            ArrayList<Compra_wishlist> compras = dao_compra.getCompraWishlistByIdUsuario(usuario);
+            String wl = gson.toJson(compras);
+            out.print(wl);
+        }
+        
+        if (action.equalsIgnoreCase("getLibrosCompradosByFolio")) {
+            ArrayList<Compra_wishlist> compras = dao_compra.getCompraWishlistByIdUserAndFolio(usuario, request.getParameter("folio"));
+            String wl = gson.toJson(compras);
+            out.print(wl);
         }
     }
 

@@ -129,11 +129,13 @@ create table compartir_wish_list(
     alias text
 )engine=innodb;
 
+-- Campo agregado id_usuario_compra
 Create table compra_wish_list(
     id_compraWL int(30) auto_increment primary key,
     id_wish_list int(30),
     folio int(30),
-    fecha date
+    fecha date,
+    id_usuario_compra int(30)
 )engine=innodb;
 
 -- Tabla agregada
@@ -414,11 +416,21 @@ INSERT INTO usuario VALUES(null, 1, "juanalva432@gmail.com", "123", "usuario");
 INSERT INTO usuario VALUES(null, 2, "juan.alva.bustamante@gmail.com", "123", "usuario");
 INSERT INTO usuario VALUES(null, 3, "2516360014jalvab@gmail.com", "123", "usuario");
 
+INSERT INTO tarjeta_prepago VALUES (null, 123456, "Activa", 600, 1);
+INSERT INTO tarjeta_prepago VALUES (null, 123456, "Activa", 600, 2);
+INSERT INTO tarjeta_prepago VALUES (null, 123456, "Activa", 600, 3);
+
+INSERT INTO saldo_persona VALUES(null, 1, 600, 60);
+INSERT INTO saldo_persona VALUES(null, 2, 600, 60);
+INSERT INTO saldo_persona VALUES(null, 3, 600, 60);
+
 INSERT INTO autor VALUES (null, "juan", "alva", "bustamante");
 INSERT INTO autor VALUES (null, "ivan", "villa", "siordia");
 
 INSERT INTO libro VALUES (null, "lirbo 1", "10001", "Esfinge", 1, "Libro numero 1", 200, "img.png", 30, "Anime", "Buen estado");
 INSERT INTO libro VALUES (null, "lirbo 2", "10002", "Esfinge2", 2, "Libro numero 2", 300, "img2.png", 32, "Anime2", "Buen estado mejor");
+INSERT INTO libro VALUES (null, "Cien años", "10001", "Esfinge", 1, "Libro numero 1", 200, "img.png", 30, "Anime", "Buen estado");
+INSERT INTO libro VALUES (null, "Hola amigos", "10002", "Esfinge2", 2, "Libro numero 2", 300, "img2.png", 32, "Anime2", "Buen estado mejor");
 
 INSERT INTO wish_list VALUES(null, 1, (SELECT DATE_ADD(now(), INTERVAL 30 DAY)));
 INSERT INTO wish_list VALUES(null, 2, (SELECT DATE_ADD(now(), INTERVAL 30 DAY)));

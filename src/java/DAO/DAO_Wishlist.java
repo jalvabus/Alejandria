@@ -24,7 +24,7 @@ public class DAO_Wishlist {
         db_manager = new DB_Manager();
         connection = db_manager.getConnection();
     }
-    
+
     public boolean addToWishlist(Wishlist wish) {
         final String SQL = "INSERT INTO wishlist VALUES(null,'" + wish.getUsuario().getId_Usuario() + "', , (SELECT DATE_ADD(now(), INTERVAL 30 DAY)));";
         System.out.println(SQL);
@@ -64,7 +64,7 @@ public class DAO_Wishlist {
     public Wishlist getWishlistByIDUser(int id_usuario) {
         Wishlist wl = new Wishlist();
         try {
-            String SQL = "select * from wish_list where id_usuario  = " + id_usuario + ";";
+            String SQL = "select * from wish_list where id_usuario  = " + id_usuario + " and ((viegencia > now()));";
             PreparedStatement ps = connection.prepareCall(SQL);
             System.out.println(SQL);
             ResultSet rs = ps.executeQuery();
@@ -81,10 +81,10 @@ public class DAO_Wishlist {
         return wl;
     }
 
-     public Wishlist getWishlistByID(int id_wish_list) {
+    public Wishlist getWishlistByID(int id_wish_list) {
         Wishlist wl = new Wishlist();
         try {
-            String SQL = "select * from wish_list where id_wish_list  = " + id_wish_list + ";";
+            String SQL = "select * from wish_list where id_wish_list  = " + id_wish_list + " and (viegencia > now());";
             PreparedStatement ps = connection.prepareCall(SQL);
             System.out.println(SQL);
             ResultSet rs = ps.executeQuery();
@@ -100,7 +100,7 @@ public class DAO_Wishlist {
         }
         return wl;
     }
-     
+
     public boolean addToWishlist(Wishlist wl, Libro libro) {
         final String SQL = "INSERT INTO detalle_wish VALUES(null,'" + wl.getId_wishlist() + "','" + libro.getId_libro() + "', false)";
         System.out.println(SQL);
@@ -144,7 +144,6 @@ public class DAO_Wishlist {
     }
 
     public boolean shareWishlist(Wishlist wishlist, int id_usuario_shared) {
-
         final String SQL = "INSERT INTO compartir_wish_list VALUES(null,'" + wishlist.getId_wishlist() + "', '" + id_usuario_shared + "', '" + id_usuario_shared + "')";
         System.out.println(SQL);
         try {
@@ -157,6 +156,4 @@ public class DAO_Wishlist {
         }
         return true;
     }
-    
-    
 }

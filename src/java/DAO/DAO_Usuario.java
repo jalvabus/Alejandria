@@ -10,6 +10,7 @@ import Model.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 /**
  *
@@ -77,8 +78,8 @@ public class DAO_Usuario {
             return null;
         }
     }
-    
-     public Usuario getOneByCorreo(String correo) {
+
+    public Usuario getOneByCorreo(String correo) {
         try {
             // Login por usuario
             String SQL = "select * from usuario where usuario = '" + correo + "';";
@@ -103,7 +104,7 @@ public class DAO_Usuario {
             return null;
         }
     }
-    
+
     public Usuario getUser(String user, String pswd) {
         try {
             // Login por usuario
@@ -148,5 +149,49 @@ public class DAO_Usuario {
             System.out.println("Error $Usuarios > login : " + e);
             return null;
         }
+    }
+
+    public Tarjeta_Prepago getDatosTarjetaByIDPersona(int id_persona, String numero) {
+        Tarjeta_Prepago tarjeta = new Tarjeta_Prepago();
+        try {
+            // Login por usuario
+            String SQL = "select * from tarjeta_prepago where id_persona = " + id_persona + " and numero = " + numero + ";";
+            PreparedStatement ps = connection.prepareCall(SQL);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                tarjeta.setId_tarjeta(rs.getInt(1));
+                tarjeta.setNumero(rs.getInt(2));
+                tarjeta.setEstado(rs.getString(3));
+                tarjeta.setSaldo(rs.getFloat(4));
+                DAO_Usuario dao_usuario = new DAO_Usuario();
+                tarjeta.setPersona(dao_usuario.getPersonaByID(rs.getInt(5)));
+            }
+        } catch (Exception e) {
+            System.out.println("Error $Usuarios > login : " + e);
+            return null;
+        }
+        return tarjeta;
+    }
+
+    public Saldo_persona getSaldoByIdPersona(int id_persona) {
+        Saldo_persona saldo = new Saldo_persona();
+        try {
+            String SQL = "select * from saldo_persona where id_persona = " + id_persona + ";";
+            PreparedStatement ps = connection.prepareCall(SQL);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                saldo.setId_saldo(rs.getInt(1));
+                DAO_Usuario dao_usuario = new DAO_Usuario();
+                saldo.setPersona(dao_usuario.getPersonaByID(rs.getInt(2)));
+                saldo.setSaldo(rs.getFloat(3));
+                saldo.setPuntos(rs.getInt(4));
+            }
+        } catch (Exception e) {
+            System.out.println("Error $Usuarios > login : " + e);
+            return null;
+        }
+        return saldo;
     }
 }
