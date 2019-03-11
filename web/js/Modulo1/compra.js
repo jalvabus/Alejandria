@@ -10,6 +10,7 @@ app.controller('compraController', ($scope, $http) => {
     $scope.listlibros = {};
     $scope.usuario = {};
     $scope.carrito = {};
+    $scope.tipo_pago = '';
     
     $scope.validateLogin = function () {
         var params = "?action=authlogin";
@@ -129,6 +130,39 @@ app.controller('compraController', ($scope, $http) => {
         $('#modal_carrito').modal('show');
         $scope.getCarrito();
     }
+    
+    $scope.comprar = function() {
+        if($scope.tipo_pago == 'Saldo electronico'){
+            $scope.comprarBySaldo($scope.dir_envio);
+        }else{
+            
+        }
+    }
+    
+    $scope.comprarBySaldo = function(dir_envio) {
+        var action = 'comprarBySaldo';
+        $http(
+            {
+                method: 'POST',
+                url: 'carrito?action=' + action + '&dir_envio=' + dir_envio,
+                data: 'action=' + action,
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+            }).then(function successCallback(response) {
+                console.log(response);
+                
+                if(response.data === 'succes') {
+                     swal("", "Compra realizalada con exito", "success");
+                     $('#modal_carrito').modal('hide');
+                } else if(response.data === 'menor') {
+                      swal("Oops!", "No cuentas con el saldo suficiente", "error");
+                }
+                
+            }, function errorCallback(response) {
+                console.log(response);
+            });
+    }
+    
+    //$scope.comprarBySaldo();
 
     $scope.validateLogin();
     $scope.getListLibros();

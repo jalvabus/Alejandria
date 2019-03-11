@@ -25,6 +25,22 @@ public class DAO_Libro {
         db_manager = new DB_Manager();
         connection = db_manager.getConnection();
     }
+    
+    public boolean updateStokLibro(int id) {
+        try {
+            
+            Libro libro = this.getLibroByID(id);
+            int stok = Integer.parseInt(libro.getStock()) - 1;
+            String SQL = "UPDATE libro SET stok = '"+stok+"' WHERE id_libro = '"+id+"'";
+            System.out.println(SQL);
+            PreparedStatement ps = connection.prepareCall(SQL);
+            return ps.execute();
+        }catch(Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+            
+    }
 
     public ArrayList<Libro> getAll() {
         ArrayList<Libro> libros = new ArrayList<Libro>();

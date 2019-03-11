@@ -85,10 +85,10 @@
                                         <h5 class="text-muted">Editorial {{libro.editorial}}</h5>
                                         <h5 class="text-muted">Autor - {{libro.autor.nombre}} {{libro.autor.apellido_paterno}} {{libro.autor.apellido_materno}}</h5>
                                         <h5 class="text-muted">$ {{libro.costo}} MNM</h5>
-
+                                        <h5 ng-show="libro.stock == '0'"> Libro no disponible <h5>
                                     </div>
                                      <div class="col-md-2">
-                                         <button class="btn btn-default btn-block btn-lg" ng-click="addLibroInCarrito(libro)"> <i class="fa fa-shopping-cart"></i></button>
+                                         <button ng-show="libro.stock != '0'" class="btn btn-default btn-block btn-lg" ng-click="addLibroInCarrito(libro)"> <i class="fa fa-shopping-cart"></i></button>
                                     </div> 
                                 </div>
                             </li>
@@ -110,10 +110,10 @@
                     </button>
                   </div>
                     
-                    <button class="btn btn-secondary" ng-click="dropCarrito()"> Vaciar </button>
+                    
                   <div class="modal-body">
                     <h4 ng-show="carrito.libros.length == 0">No tienes libros en tu carrito de compra :(</h4>
-                    <ul  ng-show="carrito.libros.length > 0" class="list-group">
+                    <ul ng-show="carrito.libros.length > 0" class="list-group">
                       <li ng-repeat="libro in carrito.libros"class="list-group-item d-flex justify-content-between align-items-center">
                         {{libro.nombre}}
                         
@@ -128,13 +128,26 @@
                         <h4>Subtotal: $ {{carrito.subtotal}}</h4>
                         <h4>IVA: $ {{carrito.iva}}</h4>
                         <h4>Total: $ {{carrito.total}}</h4>
+                        <h6 ng-show="carrito.total < 600">Se cobraran $50 extra por costos de envio</h6>
+                    </div>
+                      
+                    <div class="container-fluid">
+                        <label>Tipo pago</label>
+                        <select selected class="form-control" ng-model="tipo_pago" style="margin-bottom: 10px;">
+                            <option val="saldo">Saldo electronico</option>
+                            <option val="tarjeta">Tarjeta</option>
+                        </select>
+                        
+                        <label>Direcci&oacute;n de envio</label>
+                        <input class="form-control" ng-model="dir_envio" style="margin-bottom: 10px;">
+                        <button ng-show="carrito.libros.length > 0 && tipo_pago != '' && dir_envio != ''"  ng-click="comprar()" type="button" class="btn btn-secondary btn-block" ng-click="comprar()">Comprar</button>
                     </div>
                       
                     </ul>
                   </div>
                   <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Comprar</button>
+                    <button ng-show="carrito.libros.length > 0" class="btn btn-secondary" ng-click="dropCarrito()"> Vaciar </button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                   </div>
                 </div>
               </div>

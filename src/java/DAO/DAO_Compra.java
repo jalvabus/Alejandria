@@ -7,6 +7,7 @@ package DAO;
 
 import Connection.DB_Manager;
 import Model.Compra_wishlist;
+import Model.Compra;
 import Model.Detalle_compra_wishlist;
 import Model.Libro;
 import Model.Saldo_persona;
@@ -30,6 +31,32 @@ public class DAO_Compra {
     public DAO_Compra() {
         db_manager = new DB_Manager();
         connection = db_manager.getConnection();
+    }
+    
+    /*
+      id_compra         | int(30)      | NO   | PRI | NULL    | auto_increment |
+    | id_persona        | int(30)      | YES  | MUL | NULL    |                |
+    | id_carrito        | int(30)      | YES  | MUL | NULL    |                |
+    | fecha_compra      | date         | YES  |     | NULL    |                |
+    | total             | decimal(9,2) | YES  |     | NULL    |                |
+    | tipo              | text         | YES  |     | NULL    |                |
+    | tipo_pago         | text         | YES  |     | NULL    |                |
+    | envio             | text         | YES  |     | NULL    |                |
+    | puntos_adquiridos | int(30)      | YES  |     | NULL    |                |
++-------------------
+    */
+    
+    public boolean insertCompra(Compra compra){
+        try {
+            String SQL = "INSERT INTO compra (id_persona, fecha_compra, total, tipo_pago, envio, puntos_adquiridos)  "
+                    + "VALUES ('"+compra.getId_persona()+"', null , '"+compra.getTotal()+"', '"+compra.getTipo_pago()+"' , '"+compra.getEnvio()+"' , '"+compra.getPuntos_adquiridos()+"')";
+            System.out.println(SQL);
+            PreparedStatement ps = connection.prepareCall(SQL);
+            return ps.execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public int insertCompraWishList(Usuario usuario, Wishlist wishlist, String folio) {
