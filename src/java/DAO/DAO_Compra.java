@@ -168,10 +168,12 @@ public class DAO_Compra {
             String query = "select * from compra_wish_list where id_compraWL = " + id_compra + ";";
             PreparedStatement id = connection.prepareCall(query);
             ResultSet rs = id.executeQuery();
+            System.out.println(query);
             if (rs.next()) {
                 detallescompra.setId_compra_wish(rs.getInt(1));
                 DAO_Wishlist dao_wishlist = new DAO_Wishlist();
                 detallescompra.setWishlist(dao_wishlist.getWishlistByID(rs.getInt(2)));
+                detallescompra.setDetalle_compra(this.getDetalleCompraByIdCompraWish(rs.getInt(1)));
                 detallescompra.setFolio(rs.getString(3));
                 detallescompra.setFecha(rs.getString(4));
                 DAO_Usuario dao_usuario = new DAO_Usuario();

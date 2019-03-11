@@ -188,14 +188,95 @@
                                 <table class="table">
                                     <thead>
                                         <tr>
-                                            <th></th>
+                                            <th>Fecha</th>
+                                            <th>Folio</th>
+                                            <th>Detalle</th>
                                         </tr>
                                     </thead>
+                                    <tbody>
+                                        <tr ng-repeat="compra in compras">
+                                            <th>{{compra.fecha}}</th>
+                                            <th>{{compra.folio}}</th>
+                                            <th><button class="btn" data-toggle="modal" data-target="#modal_detallesCompra"
+                                                    ng-click="detailsCompta(compra)">
+                                                    <i class="fa fa-pencil"></i>
+                                                </button></th>
+                                        </tr>
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
                 </section>
+            </div>
+
+            <!-- Modal Compra Libro -->
+            <div class="modal fade" id="modal_detallesCompra" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true"
+                aria-hidden="true" style="text-align: center;">
+                <div class="modal-dialog modal-dialog-centered" role="document" style="display: inline-block; vertical-align: middle; text-align: left; height: 100%;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="exampleModalCenterTitle">Detalles de la compra</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div style="margin-top: 20px;">
+                                <div>
+
+                                    <table class="table table-border">
+                                        <thead></thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Direccion de envio:</td>
+                                                <td>{{ detalles_compra.usuario.persona.direccion }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Nombre del libro:</td>
+                                                <td>{{ detalles_compra.detalle_compra.libro.nombre }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Autores del libro:</td>
+                                                <td>{{ detalles_compra.detalle_compra.libro.autor.nombre }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Editorial del libro:</td>
+                                                <td>{{ detalles_compra.detalle_compra.libro.editorial }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Descripcion del libro:</td>
+                                                <td>{{ detalles_compra.detalle_compra.libro.nombre }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-right">Precio del libro:</td>
+                                                <td>$ {{ detalles_compra.detalle_compra.libro.costo }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-right">Costo de envio:</td>
+                                                <td>$ 150 </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-right">Iva: (16%)</td>
+                                                <td>$ {{ detalles_compra.detalle_compra.libro.costo * 0.16 }} </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-right">Total: </td>
+                                                <td>$ {{ detalles_compra.detalle_compra.libro.costo + (detalles_compra.detalle_compra.libro.costo
+                                                    * 0.16) + 150}}
+                                                    </th>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="reset()">Close</button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Modal Compra Libro -->
@@ -328,7 +409,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="reset()">Close</button>
-                            <button type="button" class="btn btn-primary" data-dismiss="modal" ng-if="verificacionTarjeta === true" ng-click="compraLibro(libro)">Comprar
+                            <button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close" ng-if="verificacionTarjeta === true" ng-click="compraLibro(libro)">Comprar
                                 Libro
                             </button>
                         </div>

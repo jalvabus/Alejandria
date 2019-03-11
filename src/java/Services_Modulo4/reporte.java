@@ -5,9 +5,23 @@
  */
 package Services_Modulo4;
 
-import DAO.*;
-import Model.*;
-import com.google.gson.Gson;
+import Model.Compra_wishlist;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfGState;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.Desktop;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -15,78 +29,54 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.*;
-import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.text.BaseColor;
-
-import java.awt.Desktop;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintWriter;
 
 /**
  *
  * @author Juan
  */
-@WebServlet(name = "usuario", urlPatterns = {"/usuario"})
-public class usuario extends HttpServlet {
+@WebServlet(name = "reporte", urlPatterns = {"/reporte"})
+public class reporte extends HttpServlet {
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        PrintWriter out = response.getWriter();
-        String action = request.getParameter("action");
-
-        DAO_Usuario dao_usuario = new DAO_Usuario();
-        DAO_Libro dao_libro = new DAO_Libro();
-        DAO_Wishlist dao_wishlist = new DAO_Wishlist();
-        DAO_Compra dao_compra = new DAO_Compra();
-
-        HttpSession sesion = request.getSession();
-        Usuario usuario = (Usuario) sesion.getAttribute("user");
-
-        if (action.equals("getDatosTarjeta")) {
-            Tarjeta_Prepago list = dao_usuario.getDatosTarjetaByIDPersona(usuario.getPersona().getIdPersona(), request.getParameter("numero"));
-            Gson gson = new Gson();
-            String wl = gson.toJson(list);
-            out.print(wl);
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet reporte</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet reporte at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
         }
+    }
 
-        if (action.equals("getPuntos")) {
-            Saldo_persona saldo = dao_usuario.getSaldoByIdPersona(usuario.getPersona().getIdPersona());
-            Gson gson = new Gson();
-            String wl = gson.toJson(saldo);
-            out.print(wl);
-        }
-
-        if (action.equals("comprarLibro")) {
-
-            Libro libro = dao_libro.getLibroByID(Integer.parseInt(request.getParameter("id_libro")));
-            Saldo_persona saldo = dao_usuario.getSaldoByIdPersona(usuario.getPersona().getIdPersona());
-            Tarjeta_Prepago tarjeta = dao_usuario.getDatosTarjetaByIDPersona(usuario.getPersona().getIdPersona(), request.getParameter("numero"));
-            Wishlist wishlist = dao_wishlist.getWishlistByIDUser(usuario.getId_Usuario());
-
-            saldo.setSaldo(saldo.getSaldo() - Float.parseFloat(request.getParameter("total")));
-            saldo.setPuntos(saldo.getPuntos() + Integer.parseInt(request.getParameter("puntos")));
-
-            tarjeta.setSaldo(tarjeta.getSaldo() - Float.parseFloat(request.getParameter("total")));
-
-            String folio = "1000" + dao_compra.getLastfolio();
-
-            int id_compra_wishlist = dao_compra.insertCompraWishList(usuario, wishlist, folio);
-            dao_compra.insertDetalleCompraWishList(id_compra_wishlist, libro);
-
-            dao_compra.updateTaejetaSaldo(saldo, tarjeta, libro);
-
-            generarComprobante(dao_compra.getCompraWishlistById(id_compra_wishlist));
-        }
-
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        generarComprobante(new Compra_wishlist());
+        processRequest(request, response);
     }
 
     private void generarComprobante(Compra_wishlist compra) {
@@ -143,7 +133,7 @@ public class usuario extends HttpServlet {
             PdfPCell celda2 = new PdfPCell(new Paragraph("Autor", FontFactory.getFont("arial", 10, Font.BOLD, BaseColor.BLACK)));
             PdfPCell celda3 = new PdfPCell(new Paragraph("Editorial", FontFactory.getFont("arial", 10, Font.BOLD, BaseColor.BLACK)));
             PdfPCell celda4 = new PdfPCell(new Paragraph("Costo", FontFactory.getFont("arial", 10, Font.BOLD, BaseColor.BLACK)));
-
+            
             celda1.setHorizontalAlignment(Element.ALIGN_CENTER);
             celda1.setVerticalAlignment(Element.ALIGN_MIDDLE);
             celda2.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -166,7 +156,7 @@ public class usuario extends HttpServlet {
             documento.add(tabla);
 
             double costoLibro = compra.getDetalle_compra().getLibro().getCosto();
-
+            
             documento.add(new Paragraph("DATOS DEL RECEPTOR: ", FontFactory.getFont("arial", 10, Font.BOLD, BaseColor.BLACK)));
             documento.add(new Paragraph("Nombre: " + compra.getUsuario().getPersona().getNombre() + " " + compra.getUsuario().getPersona().getApellido_paterno() + " " + compra.getUsuario().getPersona().getApellido_materno(), FontFactory.getFont("arial", 10, Font.BOLD, BaseColor.BLACK)));
             documento.add(new Paragraph("Direccion: " + compra.getUsuario().getPersona().getDireccion(), FontFactory.getFont("arial", 10, Font.BOLD, BaseColor.BLACK)));
@@ -192,6 +182,20 @@ public class usuario extends HttpServlet {
             Desktop.getDesktop().open(abrir);
         } catch (IOException e) {
         }
+    }
+
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
     }
 
     /**

@@ -64,6 +64,14 @@ create table premios(
     costo_puntos int(30)
 )engine=innodb;
 
+create table canjear_premio(
+    id_canjear_premio int(30) auto_increment primary key,
+    id_premio int(30),
+    id_persona int(30),
+    fecha date,
+    cantidad int(30)
+)engine=innodb;
+
 -- Campo agregado estado_libro 
 -- Cambiado de tabla detalle_wish_list
 create table libro(
@@ -95,14 +103,6 @@ create table archivo(
     fecha date,
     registros_validos text,
     registros_erroneos text
-)engine=innodb;
-
-create table canjear_premio(
-    id_canjear_premio int(30) auto_increment primary key,
-    id_premio int(30),
-    id_persona int(30),
-    fecha date,
-    cantidad int(30)
 )engine=innodb;
 
 -- Alterar tabla wishlist id_persona por id_usuario
@@ -438,5 +438,11 @@ INSERT INTO wish_list VALUES(null, 3, (SELECT DATE_ADD(now(), INTERVAL 30 DAY)))
 
 INSERT INTO detalle_wish VALUES(null, 1, 1, false);
 INSERT INTO detalle_wish VALUES(null, 1, 2, false);
+
+INSERT INTO premios VALUES(null, 'Oso de Peluche', 'Categoria 1', 3, 'Es un oso viviente', 'img.png', 20);
+INSERT INTO premios VALUES(null, 'Casa para niñas', 'Categoria 2', 2, 'Una casa para niñas', 'img.png', 17);
+INSERT INTO premios VALUES(null, 'Premio 1', 'Categoria 5', 4, 'Descripcion 1', 'img.png', 15);
+INSERT INTO premios VALUES(null, 'Premio 2', 'Categoria 2', 1, 'Descripcion 2', 'img.png', 8);
+INSERT INTO premios VALUES(null, 'Premio 3', 'Categoria 3', 0, 'Descripcion 3', 'img.png', 12);
 
 select * from persona;

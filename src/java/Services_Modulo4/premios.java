@@ -8,6 +8,20 @@ package Services_Modulo4;
 import DAO.*;
 import Model.*;
 import com.google.gson.Gson;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfGState;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -17,90 +31,70 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.*;
-import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.text.BaseColor;
-
-import java.awt.Desktop;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintWriter;
-
 /**
  *
  * @author Juan
  */
-@WebServlet(name = "usuario", urlPatterns = {"/usuario"})
-public class usuario extends HttpServlet {
+@WebServlet(name = "premios", urlPatterns = {"/premios"})
+public class premios extends HttpServlet {
 
+    Usuario usuario;
+    
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        response.setContentType("text/html");
         PrintWriter out = response.getWriter();
         String action = request.getParameter("action");
 
-        DAO_Usuario dao_usuario = new DAO_Usuario();
-        DAO_Libro dao_libro = new DAO_Libro();
-        DAO_Wishlist dao_wishlist = new DAO_Wishlist();
-        DAO_Compra dao_compra = new DAO_Compra();
-
         HttpSession sesion = request.getSession();
-        Usuario usuario = (Usuario) sesion.getAttribute("user");
+        usuario = (Usuario) sesion.getAttribute("user");
+        
+        DAO_Premio dao_premio = new DAO_Premio();
+        DAO_Usuario dao_usuario = new DAO_Usuario();
 
-        if (action.equals("getDatosTarjeta")) {
-            Tarjeta_Prepago list = dao_usuario.getDatosTarjetaByIDPersona(usuario.getPersona().getIdPersona(), request.getParameter("numero"));
+        if (action.equals("getAll")) {
+
             Gson gson = new Gson();
-            String wl = gson.toJson(list);
-            out.print(wl);
+            String premios = gson.toJson(dao_premio.getAll());
+            out.println(premios);
         }
 
-        if (action.equals("getPuntos")) {
-            Saldo_persona saldo = dao_usuario.getSaldoByIdPersona(usuario.getPersona().getIdPersona());
+        if (action.equals("getPremiosByUser")) {
             Gson gson = new Gson();
-            String wl = gson.toJson(saldo);
-            out.print(wl);
+            String premios = gson.toJson(dao_premio.getPremiosByIdPersona(usuario.getPersona().getIdPersona()));
+            out.println(premios);
         }
 
-        if (action.equals("comprarLibro")) {
-
-            Libro libro = dao_libro.getLibroByID(Integer.parseInt(request.getParameter("id_libro")));
+        if (action.equals("canjearPremio")) {
             Saldo_persona saldo = dao_usuario.getSaldoByIdPersona(usuario.getPersona().getIdPersona());
-            Tarjeta_Prepago tarjeta = dao_usuario.getDatosTarjetaByIDPersona(usuario.getPersona().getIdPersona(), request.getParameter("numero"));
-            Wishlist wishlist = dao_wishlist.getWishlistByIDUser(usuario.getId_Usuario());
+            Premio premio = dao_premio.getPremioByID(Integer.parseInt(request.getParameter("id_premio")));
 
-            saldo.setSaldo(saldo.getSaldo() - Float.parseFloat(request.getParameter("total")));
-            saldo.setPuntos(saldo.getPuntos() + Integer.parseInt(request.getParameter("puntos")));
+            saldo.setPuntos(saldo.getPuntos() - (premio.getCosto_puntos() * Integer.parseInt(request.getParameter("cantidad"))));
+            premio.setStock(premio.getStock() - Integer.parseInt(request.getParameter("cantidad")));
 
-            tarjeta.setSaldo(tarjeta.getSaldo() - Float.parseFloat(request.getParameter("total")));
+            dao_premio.updatePuntosPersona(saldo);
+            dao_premio.updateStockPremio(premio);
+            dao_premio.insertCanjear_premio(premio, usuario.getPersona().getIdPersona(), Integer.parseInt(request.getParameter("cantidad")));
 
-            String folio = "1000" + dao_compra.getLastfolio();
-
-            int id_compra_wishlist = dao_compra.insertCompraWishList(usuario, wishlist, folio);
-            dao_compra.insertDetalleCompraWishList(id_compra_wishlist, libro);
-
-            dao_compra.updateTaejetaSaldo(saldo, tarjeta, libro);
-
-            generarComprobante(dao_compra.getCompraWishlistById(id_compra_wishlist));
+            Gson gson = new Gson();
+            String premios = gson.toJson(dao_premio.getAll());
+            out.println(premios);
         }
-
     }
 
-    private void generarComprobante(Compra_wishlist compra) {
+    private void generarComprobante(Premio premio) {
         String ruta = "C:\\reportes\\";
 
         try {
             Document documento = new Document();
 
-            PdfWriter writer = PdfWriter.getInstance(documento, new FileOutputStream(ruta + "Comprobante" + compra.getFolio() + ".pdf"));
+            PdfWriter writer = PdfWriter.getInstance(documento, new FileOutputStream(ruta + "ComprobantePremio.pdf"));
 
             documento.open();
 
             //Este es el nombre de la cabecera
-            documento.add(new Paragraph("\nCOMPROBANTE DE COMPRA " + compra.getFolio(), FontFactory.getFont("arial", 15, Font.BOLD, BaseColor.WHITE)));
+            documento.add(new Paragraph("\nCOMPROBANTE DE CANJE ", FontFactory.getFont("arial", 15, Font.BOLD, BaseColor.WHITE)));
 
             String IMAGE = "C:/reportes/favicon.png";
 
@@ -123,7 +117,7 @@ public class usuario extends HttpServlet {
             tablita.setSpacingBefore(20f); //Space before table
             tablita.setSpacingAfter(10f); //Space after table
 
-            PdfPCell celdat1 = new PdfPCell(new Paragraph("COMPROBANTE DE COMPRA " + compra.getFolio(), FontFactory.getFont("arial", 15, Font.BOLD, BaseColor.BLACK)));
+            PdfPCell celdat1 = new PdfPCell(new Paragraph("COMPROBANTE DE CANJE ", FontFactory.getFont("arial", 15, Font.BOLD, BaseColor.BLACK)));
 
             celdat1.setBorderColor(BaseColor.WHITE);
             celdat1.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -168,8 +162,8 @@ public class usuario extends HttpServlet {
             double costoLibro = compra.getDetalle_compra().getLibro().getCosto();
 
             documento.add(new Paragraph("DATOS DEL RECEPTOR: ", FontFactory.getFont("arial", 10, Font.BOLD, BaseColor.BLACK)));
-            documento.add(new Paragraph("Nombre: " + compra.getUsuario().getPersona().getNombre() + " " + compra.getUsuario().getPersona().getApellido_paterno() + " " + compra.getUsuario().getPersona().getApellido_materno(), FontFactory.getFont("arial", 10, Font.BOLD, BaseColor.BLACK)));
-            documento.add(new Paragraph("Direccion: " + compra.getUsuario().getPersona().getDireccion(), FontFactory.getFont("arial", 10, Font.BOLD, BaseColor.BLACK)));
+            documento.add(new Paragraph("Nombre: " + usuario.getPersona().getNombre() + " " + usuario.getPersona().getApellido_paterno() + " " + usuario.getPersona().getApellido_materno(), FontFactory.getFont("arial", 10, Font.BOLD, BaseColor.BLACK)));
+            documento.add(new Paragraph("Direccion: " + usuario.getPersona().getDireccion(), FontFactory.getFont("arial", 10, Font.BOLD, BaseColor.BLACK)));
             documento.add(new Paragraph("\nDETALLES: ", FontFactory.getFont("arial", 10, Font.BOLD, BaseColor.BLACK)));
             documento.add(new Paragraph("Costo de envio: $ 150", FontFactory.getFont("arial", 10, Font.BOLD, BaseColor.BLACK)));
             documento.add(new Paragraph("Iva(16%): " + String.valueOf(costoLibro * 0.16), FontFactory.getFont("arial", 10, Font.BOLD, BaseColor.BLACK)));
@@ -185,15 +179,7 @@ public class usuario extends HttpServlet {
             e.printStackTrace();
         }
     }
-
-    public void mostrarReporte(String ruta) {
-        try {
-            File abrir = new File(ruta);
-            Desktop.getDesktop().open(abrir);
-        } catch (IOException e) {
-        }
-    }
-
+    
     /**
      * Returns a short description of the servlet.
      *

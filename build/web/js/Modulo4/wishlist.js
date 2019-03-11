@@ -343,7 +343,10 @@ app.controller('wishListController', ($scope, $http) => {
             button: "Aceptar"
         });
 
-        $scope.reset();
+        $scope.getBooksBuy();
+        $scope.validateLogin();
+        $scope.getListLibros();
+        $scope.getSharedWishList();
     }
 
     $scope.getPuntos = function () {
@@ -370,7 +373,7 @@ app.controller('wishListController', ($scope, $http) => {
     }
 
     $scope.mislibros = [];
-
+    $scope.compras = [];
     $scope.getBooksBuy = function () {
         var action = 'getLibrosComprados';
         $http({
@@ -381,7 +384,7 @@ app.controller('wishListController', ($scope, $http) => {
         }).then(function successCallback(response) {
             console.log(response.data);
             var array = response.data;
-
+            $scope.compras = response.data;
             array.forEach((compra) => {
                 $scope.mislibros.push(compra.detalle_compra.libro);
             })
@@ -426,6 +429,10 @@ app.controller('wishListController', ($scope, $http) => {
         }
     };
 
+    $scope.detalles_compra = {};
+    $scope.detailsCompta = function (detalles) {
+        $scope.detalles_compra = detalles;
+    }
 })
 
 
