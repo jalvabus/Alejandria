@@ -83,6 +83,17 @@ public class carrito extends HttpServlet {
             session.setAttribute("carrito", carrito);
             out.print("success");
         }
+        
+        if(action.equals("dropCarrito")){
+            carrito.getLibros().clear();
+            
+            carrito.setSubtotal(calculaSubTotal(carrito.getLibros()));
+            carrito.setIva(carrito.getSubtotal() * 0.16);
+            carrito.setTotal(carrito.getSubtotal() + carrito.getIva());
+            
+            session.setAttribute("carrito", carrito);
+            out.print("success");
+        }
     }
     
     public double calculaSubTotal(ArrayList<Libro> libros) {

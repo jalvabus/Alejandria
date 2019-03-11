@@ -67,6 +67,11 @@
                     <li><a href="#" onclick="DinamicoDiv('sugerencias');">Sugerencias</a></li>
                     <li><a href="wishlist.jsp" >Wishlist</a></li>
                     <li><a href="indexGeneral.jsp">Salir</a></li>
+                    
+                    <select class="form-control">
+                        <option> Tipo de pago </option>
+                        <option val="prepago">Tarjeta Prepag</option>
+                    
                 </ul>
             </div>
 
