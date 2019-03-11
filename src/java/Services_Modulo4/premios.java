@@ -21,6 +21,8 @@ import com.itextpdf.text.pdf.PdfGState;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.Desktop;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -77,13 +79,15 @@ public class premios extends HttpServlet {
             dao_premio.updateStockPremio(premio);
             dao_premio.insertCanjear_premio(premio, usuario.getPersona().getIdPersona(), Integer.parseInt(request.getParameter("cantidad")));
 
+            generarComprobante(premio, Integer.parseInt(request.getParameter("cantidad")));
+            
             Gson gson = new Gson();
             String premios = gson.toJson(dao_premio.getAll());
             out.println(premios);
         }
     }
 
-    private void generarComprobante(Premio premio) {
+    private void generarComprobante(Premio premio, int cantidad) {
         String ruta = "C:\\reportes\\";
 
         try {
@@ -136,7 +140,7 @@ public class premios extends HttpServlet {
             PdfPCell celda1 = new PdfPCell(new Paragraph("Premio", FontFactory.getFont("arial", 10, Font.BOLD, BaseColor.BLACK)));
             PdfPCell celda2 = new PdfPCell(new Paragraph("Categoria", FontFactory.getFont("arial", 10, Font.BOLD, BaseColor.BLACK)));
             PdfPCell celda3 = new PdfPCell(new Paragraph("Descripcion", FontFactory.getFont("arial", 10, Font.BOLD, BaseColor.BLACK)));
-            PdfPCell celda4 = new PdfPCell(new Paragraph("Costo", FontFactory.getFont("arial", 10, Font.BOLD, BaseColor.BLACK)));
+            PdfPCell celda4 = new PdfPCell(new Paragraph("Cantidad", FontFactory.getFont("arial", 10, Font.BOLD, BaseColor.BLACK)));
 
             celda1.setHorizontalAlignment(Element.ALIGN_CENTER);
             celda1.setVerticalAlignment(Element.ALIGN_MIDDLE);
@@ -152,33 +156,36 @@ public class premios extends HttpServlet {
             tabla.addCell(celda3);
             tabla.addCell(celda4);
 
-            tabla.addCell(new PdfPCell(new Paragraph(compra.getDetalle_compra().getLibro().getNombre(), FontFactory.getFont("arial", 10, Font.NORMAL, BaseColor.BLACK))));
-            tabla.addCell(new PdfPCell(new Paragraph(compra.getDetalle_compra().getLibro().getAutor().getNombre(), FontFactory.getFont("arial", 10, Font.NORMAL, BaseColor.BLACK))));
-            tabla.addCell(new PdfPCell(new Paragraph(compra.getDetalle_compra().getLibro().getEditorial(), FontFactory.getFont("arial", 10, Font.NORMAL, BaseColor.BLACK))));
-            tabla.addCell(new PdfPCell(new Paragraph("$ " + String.valueOf(compra.getDetalle_compra().getLibro().getCosto()), FontFactory.getFont("arial", 10, Font.NORMAL, BaseColor.BLACK))));
+            tabla.addCell(new PdfPCell(new Paragraph(premio.getNombre(), FontFactory.getFont("arial", 10, Font.NORMAL, BaseColor.BLACK))));
+            tabla.addCell(new PdfPCell(new Paragraph(premio.getCategoria(), FontFactory.getFont("arial", 10, Font.NORMAL, BaseColor.BLACK))));
+            tabla.addCell(new PdfPCell(new Paragraph(premio.getDescripcion(), FontFactory.getFont("arial", 10, Font.NORMAL, BaseColor.BLACK))));
+            tabla.addCell(new PdfPCell(new Paragraph(String.valueOf(cantidad), FontFactory.getFont("arial", 10, Font.NORMAL, BaseColor.BLACK))));
             // Adding Table to document        
             documento.add(tabla);
-
-            double costoLibro = compra.getDetalle_compra().getLibro().getCosto();
 
             documento.add(new Paragraph("DATOS DEL RECEPTOR: ", FontFactory.getFont("arial", 10, Font.BOLD, BaseColor.BLACK)));
             documento.add(new Paragraph("Nombre: " + usuario.getPersona().getNombre() + " " + usuario.getPersona().getApellido_paterno() + " " + usuario.getPersona().getApellido_materno(), FontFactory.getFont("arial", 10, Font.BOLD, BaseColor.BLACK)));
             documento.add(new Paragraph("Direccion: " + usuario.getPersona().getDireccion(), FontFactory.getFont("arial", 10, Font.BOLD, BaseColor.BLACK)));
-            documento.add(new Paragraph("\nDETALLES: ", FontFactory.getFont("arial", 10, Font.BOLD, BaseColor.BLACK)));
-            documento.add(new Paragraph("Costo de envio: $ 150", FontFactory.getFont("arial", 10, Font.BOLD, BaseColor.BLACK)));
-            documento.add(new Paragraph("Iva(16%): " + String.valueOf(costoLibro * 0.16), FontFactory.getFont("arial", 10, Font.BOLD, BaseColor.BLACK)));
-            documento.add(new Paragraph("Total: " + String.valueOf((costoLibro * 0.16) + 150 + costoLibro), FontFactory.getFont("arial", 10, Font.BOLD, BaseColor.BLACK)));
 
             // Closing the document       
             documento.close();
 
-            mostrarReporte(ruta + "Comprobante" + compra.getFolio() + ".pdf");
+            mostrarReporte(ruta + "ComprobantePremio.pdf");
         } catch (DocumentException e) {
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+    
+    public void mostrarReporte(String ruta) {
+        try {
+            File abrir = new File(ruta);
+            Desktop.getDesktop().open(abrir);
+        } catch (IOException e) {
+        }
+    }
+
     
     /**
      * Returns a short description of the servlet.
