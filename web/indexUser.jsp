@@ -15,8 +15,6 @@
     <!-- CSS Bootstrap -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/font-awesome.min.css">
-    <!-- CSS Stock de libros-->
-    <link rel="stylesheet" href="css/StLiStock.css">
 
     <!-- Main css -->
     <link rel="stylesheet" href="css/style.css">
@@ -64,10 +62,16 @@
                     <li class="active"><a href="#" onclick="DinamicoDiv('inicio');">Perfil</a></li>
                     <li><a href="#" onclick="DinamicoDiv('eventos');">Eventos</a></li>
                     <li><a href="#" onclick="DinamicoDiv('libros');">Libros</a></li>
-                    <li><a href="#" onclick="DinamicoDiv('compras');">Compras</a></li>
+                    <li><a href="compra.jsp" onclick="DinamicoDiv('compras');">Compras</a></li>
                     <li><a href="#" onclick="DinamicoDiv('premios');">Premios</a></li>
                     <li><a href="#" onclick="DinamicoDiv('sugerencias');">Sugerencias</a></li>
+                    <li><a href="wishlist.jsp" >Wishlist</a></li>
                     <li><a href="indexGeneral.jsp">Salir</a></li>
+                    
+                    <select class="form-control">
+                        <option> Tipo de pago </option>
+                        <option val="prepago">Tarjeta Prepag</option>
+                    
                 </ul>
             </div>
 
@@ -266,158 +270,438 @@
         </section>
     </div>
 
-    <!-- Seccion Modal de Libros -->
-       
-    <div class="container">
-                <div ng-app="myApp" ng-controller="myCtrl" class="modal" id="ModalLibro" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                  <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Registrar Libro</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-                      <div class="modal-body">
-                        <div class="col-md-12">
-                            <form>
-                                <div class="form-group col-md-6 col-sm-12 col-lg-6 col-xl-6"  >
-                                    <label for="fGL-ISBN">Código ISBN</label>
-                                    <input type="text" class="form-control" ng-model="ISBN" id="ISBN" >
-                                </div>
-                                <div class="form-group col-md-6 col-sm-12 col-lg-6 col-xl-6">
-                                    <label for="fGL-TiLibro">Titulo del Libro</label>
-                                    <input type="text" class="form-control" id="TiLibro" placeholder="Titulo del libro"  required>
-                                </div>
-                                <div class="form-group col-md-6 col-sm-12 col-lg-6 col-xl-6">
-                                    <label for="Select">Autor del libro</label>
-                                    <input type="text" class="form-control" id="AutorL" placeholder="Autor del libro"  required>
-                                </div>
-                                <div class="form-group col-md-6 col-sm-12 col-lg-6 col-xl-6">
-                                    <label for="SelectCategoria">Categoria</label>
-                                    <select id="SelectCategoria" class="form-control" required>
-                                        <option value="1">Aventura</option>
-                                        <option value="2">Ciencia Ficción</option>
-                                        <option value="3">Deportes</option>
-                                        <option value="4">Infantil</option>
-                                        <option value="5">Novela</option>
-                                        <option value="6">Policial</option>
-                                        <option value="7">Política</option>
-                                        <option value="8">Romántica</option>
-                                        <option value="9">Terror</option>
-                                        <option value="10">Viajes</option>                                        
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-6 col-sm-12 col-lg-6 col-xl-6">
-                                    <label for="fGL-Editorial">Editorial</label>
-                                    <input type="text" class="form-control" ng-model="Editorial" id="Editorial" placeholder="Editorial" required>
-                                </div>
-                                <div class="form-group col-md-6 col-sm-12 col-lg-6 col-xl-6">
-                                    <label for="fGL-Costo">Costo</label>
-                                    <input type="text" class="form-control" ng-model="CostoLi" id="CostoLi" placeholder="$$$$" required>
-                                </div>
-                                <div class="form-group col-md-6 col-sm-12 col-lg-6 col-xl-6">
-                                    <label for="fGL-LibroDesc">Descripción</label>
-                                    <TEXTAREA class="form-control" ng-model="LibroDesc" id="LibroDesc" placeholder="Escribe algo..." required></TEXTAREA >
-                                </div>
-                                <div class="form-group col-md-6 col-sm-12 col-lg-6 col-xl-6">
-                                    <label class="mt-3" for="customRangeStock">Stock</label>
-                                    <input class="custom-range" ng-model="customRangeStock" id="customRangeStock" type="range" name="foo" min="10" max="100" style="width: 240px;">
-                                    <output for="foo" onforminput="value = foo.valueAsNumber;" style="margin-bottom: -45px;"></output>
-                                </div>
+    <!-- Seccion de Libros -->
+    <div id="libros" style="display: none">
+        <section id="gallery">
+            <div class="container">
+                <div class="row">
 
-                                <div class="form-group col-md-12 col-sm-12 col-lg-12 col-xl-12">
-                                <input type="file" class="form-control-file" ng-model="FormControlFileLibro" id="FormControlFileLibro" required>
-                                </div>
-                            </form>
-                        </div>
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-primary" onclick="IngresarLibro();">Guardar Cambios</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-            </div>
-             <!-- Seccion de Libros -->
-            <div id="libros" >
-                    <section id="gallery">
-                        <div class="container">
-                                        <!-- Button trigger modal -->
-                                <div class="col-md-5 col-md-offset-1 col-sm-6">
-                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ModalLibro" >
-                                          Ingresar nuevo Libro
-                                    </button>
-                                </div>
-                                <div class="col-md-offset-1 col-md-10 col-sm-12">
-                                    <h2>Aqui se visualizan y compran los libros</h2>
-                                    <p>Aliquam blandit velit nisi, sed fringilla felis lacinia sed. Integer vitae porta felis.
-                                        Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
-                                        Phasellus non tristique lacus. Suspendisse ut tortor vitae risus lacinia tristique. Aliquam
-                                        sed consectetur libero.</p>
-                                    <p>Morbi tellus dolor, porta dignissim enim sit amet, dapibus sagittis erat. In blandit elit
-                                        sit amet dui aliquet congue nec vel quam. Integer id tristique libero.</p>
-                                    <span></span>
-                                    <div class="col-md-6 col-sm-6">
-                                        <div class="gallery-thumb">
-                                            <a href="images/gallery-image1.jpg" class="image-popup">
-                                                <img src="images/gallery-image1.jpg" class="img-responsive" alt="Gallery Image">
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6 col-sm-6">
-                                        <div class="gallery-thumb">
-                                            <a href="images/gallery-image2.jpg" class="image-popup">
-                                                <img src="images/gallery-image2.jpg" class="img-responsive" alt="Gallery Image">
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6 col-sm-6">
-                                        <div class="gallery-thumb">
-                                            <a href="images/gallery-image3.jpg" class="image-popup">
-                                                <img src="images/gallery-image3.jpg" class="img-responsive" alt="Gallery Image">
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6 col-sm-6">
-                                        <div class="gallery-thumb">
-                                            <a href="images/gallery-image4.jpg" class="image-popup">
-                                                <img src="images/gallery-image4.jpg" class="img-responsive" alt="Gallery Image">
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6 col-sm-6">
-                                        <div class="gallery-thumb">
-                                            <a href="images/gallery-image5.jpg" class="image-popup">
-                                                <img src="images/gallery-image5.jpg" class="img-responsive" alt="Gallery Image">
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6 col-sm-6">
-                                        <div class="gallery-thumb">
-                                            <a href="images/gallery-image6.jpg" class="image-popup">
-                                                <img src="images/gallery-image6.jpg" class="img-responsive" alt="Gallery Image">
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-12 col-sm-12">
-                                        <p>Aliquam blandit velit nisi, sed fringilla felis lacinia sed. Integer vitae porta felis.
-                                            Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos
-                                            himenaeos. Phasellus non tristique lacus.</p>
-                                    </div>
-                                </div>
-
+                    <div class="col-md-offset-1 col-md-10 col-sm-12">
+                        <h2>Aqui se visualizan y compran los libros</h2>
+                        <p>Aliquam blandit velit nisi, sed fringilla felis lacinia sed. Integer vitae porta felis.
+                            Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
+                            Phasellus non tristique lacus. Suspendisse ut tortor vitae risus lacinia tristique. Aliquam
+                            sed consectetur libero.</p>
+                        <p>Morbi tellus dolor, porta dignissim enim sit amet, dapibus sagittis erat. In blandit elit
+                            sit amet dui aliquet congue nec vel quam. Integer id tristique libero.</p>
+                        <span></span>
+                        <div class="col-md-6 col-sm-6">
+                            <div class="gallery-thumb">
+                                <a href="images/gallery-image1.jpg" class="image-popup">
+                                    <img src="images/gallery-image1.jpg" class="img-responsive" alt="Gallery Image">
+                                </a>
                             </div>
-                    </section>
+                        </div>
+
+                        <div class="col-md-6 col-sm-6">
+                            <div class="gallery-thumb">
+                                <a href="images/gallery-image2.jpg" class="image-popup">
+                                    <img src="images/gallery-image2.jpg" class="img-responsive" alt="Gallery Image">
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-sm-6">
+                            <div class="gallery-thumb">
+                                <a href="images/gallery-image3.jpg" class="image-popup">
+                                    <img src="images/gallery-image3.jpg" class="img-responsive" alt="Gallery Image">
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-sm-6">
+                            <div class="gallery-thumb">
+                                <a href="images/gallery-image4.jpg" class="image-popup">
+                                    <img src="images/gallery-image4.jpg" class="img-responsive" alt="Gallery Image">
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-sm-6">
+                            <div class="gallery-thumb">
+                                <a href="images/gallery-image5.jpg" class="image-popup">
+                                    <img src="images/gallery-image5.jpg" class="img-responsive" alt="Gallery Image">
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-sm-6">
+                            <div class="gallery-thumb">
+                                <a href="images/gallery-image6.jpg" class="image-popup">
+                                    <img src="images/gallery-image6.jpg" class="img-responsive" alt="Gallery Image">
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 col-sm-12">
+                            <p>Aliquam blandit velit nisi, sed fringilla felis lacinia sed. Integer vitae porta felis.
+                                Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos
+                                himenaeos. Phasellus non tristique lacus.</p>
+                        </div>
+                    </div>
+
                 </div>
             </div>
+        </section>
+    </div>
+
+    <!-- Seccion de eventos-->
+    <div id="compras" style="display: none">
+
+        <section id="blog-single-post">
+            <div class="container">
+                <div class="row">
+
+                    <div class="col-md-offset-1 col-md-10 col-sm-12">
+                        <div class="blog-single-post-thumb">
+
+
+                            <div class="blog-post-title">
+                                <h2>Aqui se visualizan las compras de los eventos del usuario, por clasificacion</a></h2>
+                            </div>
+
+                            <div class="blog-post-format">
+                                <span><a href="#"><img src="images/author-image1.jpg" class="img-responsive img-circle">
+                                        Jen Lopez</a></span>
+                                <span><i class="fa fa-date"></i> July 22, 2017</span>
+                                <span><a href="#"><i class="fa fa-comment-o"></i> 124 Comments</a></span>
+                            </div>
+
+                            <div class="blog-post-des">
+                                <p>Vivamus euismod tempor interdum. Vivamus non scelerisque ex, et interdum leo. In
+                                    bibendum lacus vitae felis egestas, at consectetur metus facilisis. Morbi tellus
+                                    dolor, porta dignissim enim sit amet, dapibus sagittis erat. In blandit elit sit
+                                    amet dui aliquet congue nec vel quam. Integer id tristique libero.</p>
+                                <blockquote>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                                    tempor incididunt ut labore et dolore magna aliqua. </blockquote>
+                                <p>Integer vestibulum vitae arcu vel consectetur. Morbi nisl enim, elementum eget enim
+                                    nec, posuere commodo mi. Proin elementum metus et dolor posuere placerat. Proin in
+                                    sagittis justo. Nulla tincidunt eu velit elementum accumsan.</p>
+
+                                <div class="blog-post-image">
+                                    <img src="images/blog-image3.jpg" class="img-responsive" alt="Blog Image 3">
+                                </div>
+
+                                <h3>What is Personal Blog Theme?</h3>
+                                <p>Nulla tincidunt eu velit elementum accumsan. Vivamus euismod tempor interdum.
+                                    Vivamus non scelerisque ex, et interdum leo. In bibendum lacus vitae felis egestas,
+                                    at consectetur metus facilisis. Morbi tellus dolor, porta dignissim enim sit amet,
+                                    dapibus sagittis erat. In blandit elit sit amet dui aliquet congue nec vel quam.
+                                    Integer id tristique libero.</p>
+                            </div>
+
+
+
+                            <div class="blog-single-post-image">
+                                <div class="col-md-4 col-sm-4">
+                                    <img src="images/blog-image1.jpg" class="img-responsive" alt="Blog Image 1">
+                                </div>
+                                <div class="col-md-4 col-sm-4">
+                                    <img src="images/blog-image2.jpg" class="img-responsive" alt="Blog Image 2">
+                                </div>
+                                <div class="col-md-4 col-sm-4">
+                                    <img src="images/blog-image3.jpg" class="img-responsive" alt="Blog Image 3">
+                                </div>
+                            </div>
+                            <p>Aliquam blandit velit nisi, sed fringilla felis lacinia sed. Integer vitae porta felis.
+                                Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos
+                                himenaeos. Phasellus non tristique lacus. Suspendisse ut tortor vitae risus lacinia
+                                tristique. Aliquam sed consectetur libero.</p>
+
+                            <div class="blog-author">
+                                <div class="media">
+                                    <div class="media-object pull-left">
+                                        <img src="images/author-image1.jpg" class="img-circle img-responsive" alt="blog">
+                                    </div>
+                                    <div class="media-body">
+                                        <h3 class="media-heading"><a href="#">Jen Lopez ( Designer )</a></h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+                                            veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="blog-comment">
+                                <h3>Comments</h3>
+                                <div class="media">
+                                    <div class="media-object pull-left">
+                                        <img src="images/comment-image1.jpg" class="img-responsive img-circle" alt="Blog Image 11">
+                                    </div>
+                                    <div class="media-body">
+                                        <h3 class="media-heading">David Jones</h3>
+                                        <span>3 days ago</span>
+                                        <p>Aliquam gravida arcu at risus blandit, in interdum metus varius. Cras
+                                            efficitur, ex sit amet tincidunt rhoncus, dui ex hendrerit risus, ac
+                                            dapibus ligula mi id leo. In auctor dui justo, ac consequat dui posuere ac.</p>
+                                    </div>
+                                </div>
+                                <div class="media">
+                                    <div class="media-object pull-left">
+                                        <img src="images/comment-image2.jpg" class="img-responsive img-circle" alt="Blog Image 22">
+                                    </div>
+                                    <div class="media-body">
+                                        <h3 class="media-heading">Omar Larus</h3>
+                                        <span>5 days ago</span>
+                                        <p>Maecenas ultricies ante dignissim, iaculis ligula sed, gravida ipsum.
+                                            Pellentesque lobortis velit mi, sed volutpat enim facilisis.</p>
+                                    </div>
+                                </div>
+                                <div class="media">
+                                    <div class="media-object pull-left">
+                                        <img src="images/author-image2.jpg" class="img-responsive img-circle" alt="Blog Image 33">
+                                    </div>
+                                    <div class="media-body">
+                                        <h3 class="media-heading">Walker Jen</h3>
+                                        <span>July 27, 2017</span>
+                                        <p>In eu posuere nulla, sit amet semper lectus. Aliquam gravida arcu at risus
+                                            blandit, in interdum metus varius. Cras efficitur, ex sit amet tincidunt
+                                            rhoncus, dui ex hendrerit risus, ac dapibus ligula mi id leo.</p>
+                                    </div>
+                                </div>
+                                <div class="media">
+                                    <div class="media-object pull-left">
+                                        <img src="images/author-image1.jpg" class="img-responsive img-circle" alt="Blog Image 44">
+                                    </div>
+                                    <div class="media-body">
+                                        <h3 class="media-heading">Jen Lopez</h3>
+                                        <span>July 24, 2017</span>
+                                        <p>In auctor dui justo, ac consequat dui posuere ac. Lorem ipsum dolor sit
+                                            amet, maecenas eget vestibulum justo imperdiet, wisi risus purus augue
+                                            vulputate voluptate neque, curabitur.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="blog-comment-form">
+                                <h3>Leave a Comment</h3>
+                                <form action="#" method="post">
+                                    <input type="text" class="form-control" placeholder="Name" name="name" required>
+                                    <input type="email" class="form-control" placeholder="Email" name="email" required>
+                                    <textarea name="message" rows="5" class="form-control" id="message" placeholder="Message"
+                                        message="message" required="required"></textarea>
+                                    <div class="col-md-3 col-sm-4">
+                                        <input name="submit" type="submit" class="form-control" id="submit" value="Post Your Comment">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </section>
+
+    </div <!-- Seccion de Premios -->
+    <div id="premios" style="display: none">
+        <section id="gallery">
+            <div class="container">
+                <div class="row">
+
+                    <div class="col-md-offset-1 col-md-10 col-sm-12">
+                        <h2>Pagina unicamente vista por el usuario, aqui se programa el canje de premios</h2>
+                        <p>Aliquam blandit velit nisi, sed fringilla felis lacinia sed. Integer vitae porta felis.
+                            Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
+                            Phasellus non tristique lacus. Suspendisse ut tortor vitae risus lacinia tristique. Aliquam
+                            sed consectetur libero.</p>
+                        <p>Morbi tellus dolor, porta dignissim enim sit amet, dapibus sagittis erat. In blandit elit
+                            sit amet dui aliquet congue nec vel quam. Integer id tristique libero.</p>
+                        <span></span>
+                        <div class="col-md-6 col-sm-6">
+                            <div class="gallery-thumb">
+                                <a href="images/gallery-image1.jpg" class="image-popup">
+                                    <img src="images/gallery-image1.jpg" class="img-responsive" alt="Gallery Image">
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-sm-6">
+                            <div class="gallery-thumb">
+                                <a href="images/gallery-image2.jpg" class="image-popup">
+                                    <img src="images/gallery-image2.jpg" class="img-responsive" alt="Gallery Image">
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-sm-6">
+                            <div class="gallery-thumb">
+                                <a href="images/gallery-image3.jpg" class="image-popup">
+                                    <img src="images/gallery-image3.jpg" class="img-responsive" alt="Gallery Image">
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-sm-6">
+                            <div class="gallery-thumb">
+                                <a href="images/gallery-image4.jpg" class="image-popup">
+                                    <img src="images/gallery-image4.jpg" class="img-responsive" alt="Gallery Image">
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-sm-6">
+                            <div class="gallery-thumb">
+                                <a href="images/gallery-image5.jpg" class="image-popup">
+                                    <img src="images/gallery-image5.jpg" class="img-responsive" alt="Gallery Image">
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-sm-6">
+                            <div class="gallery-thumb">
+                                <a href="images/gallery-image6.jpg" class="image-popup">
+                                    <img src="images/gallery-image6.jpg" class="img-responsive" alt="Gallery Image">
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 col-sm-12">
+                            <p>Aliquam blandit velit nisi, sed fringilla felis lacinia sed. Integer vitae porta felis.
+                                Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos
+                                himenaeos. Phasellus non tristique lacus.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Seccion de Sugerencias -->
+    <div id="sugerencias" style="display: none">
+        <section id="blog">
+            <div class="container">
+                <div class="row">
+
+                    <div class="col-md-offset-1 col-md-10 col-sm-12">
+                        <div class="blog-post-thumb">
+                            <div class="blog-post-image">
+                                <a href="single-post.html">
+                                    <img src="images/blog-image1.jpg" class="img-responsive" alt="Blog Image">
+                                </a>
+                            </div>
+                            <div class="blog-post-title">
+                                <h3><a href="single-post.html">Aqui el usuario manda una sugerencia al administrador</a></h3>
+                            </div>
+                            <div class="blog-post-format">
+                                <span><a href="#"><img src="images/author-image1.jpg" class="img-responsive img-circle">
+                                        Jen Lopez</a></span>
+                                <span><i class="fa fa-date"></i> July 22, 2017</span>
+                                <span><a href="#"><i class="fa fa-comment-o"></i> 35 Comments</a></span>
+                            </div>
+                            <div class="blog-post-des">
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+                                    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+                                    irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+                                    pariatur.</p>
+                                <a href="single-post.html" class="btn btn-default">Continue Reading</a>
+                            </div>
+                        </div>
+
+                        <div class="blog-post-thumb">
+                            <div class="blog-post-image">
+                                <a href="single-post.html">
+                                    <img src="images/blog-image2.jpg" class="img-responsive" alt="Blog Image">
+                                </a>
+                            </div>
+                            <div class="blog-post-title">
+                                <h3><a href="single-post.html">In pretium tellus et ante accumsan</a></h3>
+                            </div>
+                            <div class="blog-post-format">
+                                <span><a href="#"><img src="images/author-image2.jpg" class="img-responsive img-circle">
+                                        Leo Dennis</a></span>
+                                <span><i class="fa fa-date"></i> June 10, 2017</span>
+                                <span><a href="#"><i class="fa fa-comment-o"></i> 48 Comments</a></span>
+                            </div>
+                            <div class="blog-post-des">
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+                                    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+                                    irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+                                    pariatur.</p>
+                                <a href="single-post.html" class="btn btn-default">Continue Reading</a>
+                            </div>
+                        </div>
+
+                        <div class="blog-post-thumb">
+                            <div class="blog-post-video">
+                                <div class="embed-responsive embed-responsive-16by9">
+                                    <iframe class="embed-responsive-item" src="" allowfullscreen></iframe><!-- Aqui la va url del video de youtube -->
+                                </div>
+                            </div>
+                            <div class="blog-post-title">
+                                <h3><a href="single-post.html">Nam interdum maximus dolor faucibus</a></h3>
+                            </div>
+                            <div class="blog-post-format">
+                                <span><a href="#"><img src="images/author-image1.jpg" class="img-responsive img-circle">
+                                        Jen Lopez</a></span>
+                                <span><i class="fa fa-date"></i> May 30, 2017</span>
+                                <span><a href="#"><i class="fa fa-comment-o"></i> 63 Comments</a></span>
+                            </div>
+                            <div class="blog-post-des">
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+                                    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+                                    irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+                                    pariatur.</p>
+                                <a href="single-post.html" class="btn btn-default">Continue Reading</a>
+                            </div>
+                        </div>
+
+                        <div class="blog-post-thumb">
+                            <div class="blog-post-image">
+                                <a href="single-post.html">
+                                    <img src="images/blog-image3.jpg" class="img-responsive" alt="Blog Image">
+                                </a>
+                            </div>
+                            <div class="blog-post-title">
+                                <h3><a href="single-post.html">The ingredients that make a great burger</a></h3>
+                            </div>
+                            <div class="blog-post-format">
+                                <span><a href="#"><img src="images/author-image2.jpg" class="img-responsive img-circle">
+                                        Leo Dennis</a></span>
+                                <span><i class="fa fa-date"></i> April 18, 2017</span>
+                                <span><a href="#"><i class="fa fa-comment-o"></i> 124 Comments</a></span>
+                            </div>
+                            <div class="blog-post-des">
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+                                    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+                                    irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+                                    pariatur.</p>
+                                <a href="single-post.html" class="btn btn-default">Continue Reading</a>
+                            </div>
+                        </div>
+
+                        <div class="blog-post-thumb">
+                            <div class="blog-post-image">
+                                <a href="single-post.html">
+                                    <img src="images/blog-image4.jpg" class="img-responsive" alt="Blog Image">
+                                </a>
+                            </div>
+                            <div class="blog-post-title">
+                                <h3><a href="single-post.html">Vestibulum vel mauris nec ex tempus</a></h3>
+                            </div>
+                            <div class="blog-post-format">
+                                <span><a href="#"><img src="images/author-image1.jpg" class="img-responsive img-circle">
+                                        Jen Lopez</a></span>
+                                <span><i class="fa fa-date"></i> March 12, 2017</span>
+                                <span><a href="#"><i class="fa fa-comment-o"></i> 256 Comments</a></span>
+                            </div>
+                            <div class="blog-post-des">
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+                                    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+                                    irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+                                    pariatur.</p>
+                                <a href="single-post.html" class="btn btn-default">Continue Reading</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </div>
     <!-- Footer Section -->
 
 
@@ -483,8 +767,6 @@
     <script src="js/jquery.parallax.js"></script>
     <script src="js/smoothscroll.js"></script>
     <script src="js/custom.js"></script>
-    <script src="js/modulo1/JsStock.js"></script>
-
 
 </body>
 

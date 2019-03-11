@@ -133,9 +133,9 @@ public class premios extends HttpServlet {
             tabla.setSpacingBefore(10f); //Space before table
             tabla.setSpacingAfter(10f); //Space after table
 
-            PdfPCell celda1 = new PdfPCell(new Paragraph("Libro", FontFactory.getFont("arial", 10, Font.BOLD, BaseColor.BLACK)));
-            PdfPCell celda2 = new PdfPCell(new Paragraph("Autor", FontFactory.getFont("arial", 10, Font.BOLD, BaseColor.BLACK)));
-            PdfPCell celda3 = new PdfPCell(new Paragraph("Editorial", FontFactory.getFont("arial", 10, Font.BOLD, BaseColor.BLACK)));
+            PdfPCell celda1 = new PdfPCell(new Paragraph("Premio", FontFactory.getFont("arial", 10, Font.BOLD, BaseColor.BLACK)));
+            PdfPCell celda2 = new PdfPCell(new Paragraph("Categoria", FontFactory.getFont("arial", 10, Font.BOLD, BaseColor.BLACK)));
+            PdfPCell celda3 = new PdfPCell(new Paragraph("Descripcion", FontFactory.getFont("arial", 10, Font.BOLD, BaseColor.BLACK)));
             PdfPCell celda4 = new PdfPCell(new Paragraph("Costo", FontFactory.getFont("arial", 10, Font.BOLD, BaseColor.BLACK)));
 
             celda1.setHorizontalAlignment(Element.ALIGN_CENTER);
