@@ -62,7 +62,7 @@
                     <li class="active"><a href="#" onclick="DinamicoDiv('inicio');">Perfil</a></li>
                     <li><a href="#" onclick="DinamicoDiv('eventos');">Eventos</a></li>
                     <li><a href="#" onclick="DinamicoDiv('libros');">Libros</a></li>
-                    <li><a href="#" onclick="DinamicoDiv('compras');">Compras</a></li>
+                    <li><a href="compra.jsp" onclick="DinamicoDiv('compras');">Compras</a></li>
                     <li><a href="#" onclick="DinamicoDiv('premios');">Premios</a></li>
                     <li><a href="#" onclick="DinamicoDiv('sugerencias');">Sugerencias</a></li>
                     <li><a href="wishlist.jsp" >Wishlist</a></li>
