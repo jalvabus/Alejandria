@@ -131,11 +131,24 @@ app.controller('compraController', ($scope, $http) => {
         $scope.getCarrito();
     }
     
+    $scope.pago = {
+      tipo: 'saldo'  
+    };
+    
     $scope.comprar = function() {
-        if($scope.tipo_pago == 'Saldo electronico'){
-            $scope.comprarBySaldo($scope.dir_envio);
+        console.log($scope.pago.tipo);
+        if($scope.pago.tipo == 'saldo'){
+            $scope.comprarBySaldo($('#dir').val());
         }else{
-            
+            $scope.comprarByTarjeta($('#dir').val());
+        }
+    }
+    
+    $scope.showContainerTarjeta = function(mode) {
+        if(mode) {
+            $('#container_tarjeta').show();
+        } else {
+            $('#container_tarjeta').hide();
         }
     }
     
@@ -160,6 +173,52 @@ app.controller('compraController', ($scope, $http) => {
             }, function errorCallback(response) {
                 console.log(response);
             });
+    }
+    
+    $scope.comprarByTarjeta = function() {
+        var numero = $('#numero').val();
+        var cvv = $('#cvv').val();
+        var vigencia = $('#vigencia').val();
+        var dir = $('#dir').val();
+        
+        console.log(numero + ' - ' + cvv + ' - ' + vigencia);
+        
+        if(numero != '' && cvv != '' && vigencia != ''){
+            if (numero.length > 19 || numero.length <19) {
+                swal("Oops!", "Numero de tarjeta invalido", "warning");
+            }else{
+                
+                var action = 'comprarByTarjeta';
+            $http(
+            {
+                method: 'POST',
+                url: 'carrito?action=' + action + '&dir_envio=' + dir + '&numero=' + numero + '&cvv=' + cvv,
+                data: 'action=' + action,
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+            }).then(function successCallback(response) {
+                console.log(response);
+                
+                if(response.data === 'succes') {
+                     swal("", "Compra realizalada con exito", "success");
+                     $('#modal_carrito').modal('hide');
+                } else if(response.data === 'menor') {
+                      swal("Oops!", "No cuentas con el saldo suficiente", "error");
+                } else if(response.data === 'null') {
+                      swal("Oops!", "No se encontre ninguna tarjeta con los datos proporcionados", "error");
+                }
+                
+            }, function errorCallback(response) {
+                console.log(response);
+            });
+                
+                
+                
+            }
+        }else{
+            swal("Oops!", "Completa todos los campos", "warning");
+        }
+        var action = 'comprarByTarjeta';
+       
     }
     
     //$scope.comprarBySaldo();

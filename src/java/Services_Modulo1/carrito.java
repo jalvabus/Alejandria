@@ -5,10 +5,12 @@ package Services_Modulo1;
 import DAO.DAO_Compra;
 import DAO.DAO_Libro;
 import DAO.DAO_SaldoPersona;
+import DAO.DAO_Tarjetacyd;
 import Model.Carrito;
 import Model.Compra;
 import Model.Libro;
 import Model.Saldo_persona;
+import Model.Tarjetacyd;
 import Model.Usuario;
 import com.google.gson.Gson;
 import java.io.IOException;
@@ -30,6 +32,7 @@ public class carrito extends HttpServlet {
     DAO_SaldoPersona daoSaldo = new DAO_SaldoPersona();
     DAO_Compra daoCompra = new DAO_Compra();
     DAO_Libro daoLibro = new DAO_Libro();
+    DAO_Tarjetacyd daoTarjeta = new DAO_Tarjetacyd();
     
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -154,6 +157,51 @@ public class carrito extends HttpServlet {
                 out.print("succes");
             }
         }
+        
+        if(action.equals("comprarByTarjeta")){
+            
+            String dirEnvio = request.getParameter("dir_envio");
+            String numero = request.getParameter("numero");
+            String cvv = request.getParameter("cvv");
+            Usuario user = (Usuario) session.getAttribute("user");
+            carrito = (Carrito)session.getAttribute("carrito");
+            
+            Tarjetacyd tarjeta = daoTarjeta.getTarjeta(numero, cvv, "");
+            //System.out.println("saldo tarjeta" + tarjeta.getSaldo());
+            //System.out.println("total carrito" + carrito.getTotal());
+
+            if(tarjeta == null){
+                out.print("null");
+            }else if(tarjeta.getSaldo() < carrito.getTotal()){
+                out.print("menor");
+            }else{
+
+                daoTarjeta.updateSaldoTarjeta(numero, tarjeta.getSaldo() - carrito.getTotal());
+                Compra compra = new Compra();
+                compra.setId_persona(user.getPersona().getIdPersona());
+                compra.setTotal(carrito.getTotal());
+                compra.setTipo_pago(tarjeta.getTipo_tarjetal());
+                compra.setEnvio(dirEnvio);
+                compra.setPuntos_adquiridos(0);
+                
+                daoCompra.insertCompra(compra);
+                
+                for(Libro libro: carrito.getLibros()){
+                    daoLibro.updateStokLibro(libro.getId_libro());
+                }
+                
+                carrito.getLibros().clear();
+            
+                carrito.setSubtotal(calculaSubTotal(carrito.getLibros()));
+                carrito.setIva(carrito.getSubtotal() * 0.16);
+                carrito.setTotal(carrito.getSubtotal() + carrito.getIva());
+
+                session.setAttribute("carrito", carrito);
+                
+                out.print("succes");
+            }
+        }
+        
         
     }
     

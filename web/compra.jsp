@@ -132,15 +132,42 @@
                     </div>
                       
                     <div class="container-fluid">
-                        <label>Tipo pago</label>
-                        <select selected class="form-control" ng-model="tipo_pago" style="margin-bottom: 10px;">
+                        <label>Tipo pago</label
+                        <br>
+                        <form>
+                            <label class="radio-inline"><input type="radio" ng-model="pago.tipo" ng-click="showContainerTarjeta(false)" value="saldo" name="pago" checked>Saldo electronico</label>
+                            <label class="radio-inline"><input type="radio" ng-model="pago.tipo" ng-click="showContainerTarjeta(true)" value="tarjeta" name="pago">Tarjeta (Credito / Debito)</label>
+                        </form>
+                        
+                        <div class="container-fluid" id="container_tarjeta">
+                            <div class="row">
+                                <div class="col">
+                                    <label>No. Tarjeta</label>
+                                    <input type="text" id="numero" maxlength="19" placeholder="XXXX-XXXX-XXXX-XXXX" class="form-control">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6" style="padding-left: 0;">
+                                    <label>CVV</label>
+                                    <input type="text" id="cvv" maxlength="16" placeholder="XXX" class="form-control">
+                                </div>
+                                <div class="col-md-6" style="padding-right: 0;">
+                                    <label>Vigencia</label>
+                                    <input type="text" id="vigencia" maxlength="16" placeholder="AAAA-MM-DD" class="form-control">
+                                </div>
+                            </div>                                   
+                        </div>
+                        
+                        
+<!--                        <select selected class="form-control" ng-model="tipo_pago" style="margin-bottom: 10px;">
                             <option val="saldo">Saldo electronico</option>
                             <option val="tarjeta">Tarjeta</option>
                         </select>
+                        -->
                         
                         <label>Direcci&oacute;n de envio</label>
-                        <input class="form-control" ng-model="dir_envio" style="margin-bottom: 10px;">
-                        <button ng-show="carrito.libros.length > 0 && tipo_pago != '' && dir_envio != ''"  ng-click="comprar()" type="button" class="btn btn-secondary btn-block" ng-click="comprar()">Comprar</button>
+                        <input class="form-control" id="dir" ng-model="dir_envio" style="margin-bottom: 10px;">
+                        <button ng-show="carrito.libros.length > 0"  ng-click="comprar()" type="button" class="btn btn-secondary btn-block" ng-click="comprar()">Comprar</button>
                     </div>
                       
                     </ul>
@@ -165,6 +192,10 @@
             <script src="js/custom.js"></script>
 
             <script src="js/Modulo1/compra.js"></script>
+            
+            <script>
+                $('#container_tarjeta').hide();
+            </script>
         </body>
 
         </html>
