@@ -33,11 +33,18 @@
 
 </head>
 
+<!-- PALIZADA -->
+<!-- Quita las directivas ng-contoller y ng-app -->
+
 <body ng-controller="nameAppController">
     <div class="container">
         <h1>Welcome {{ usuario.persona.nombre }}</h1>
 
         <button ng-click="logout()">Cerrar Sesion</button>
+
+        <!-- PALIZADA -->
+        <!-- Cerrar sesion con javascript normal -->
+        <button on-click="logout()">Cerrar Sesion</button>
     </div>
 
     <!-- SCRIPTS -->
@@ -49,6 +56,12 @@
     <script src="js/smoothscroll.js"></script>
     <script src="js/custom.js"></script>
 
+    <!-- PALIZADA -->
+    <!-- SCRIPT PARA VALIDAR EL LOGIN -->
+    <!-- LO PUEDES AGREGAN EN LOS JSP -->
+    <script src="js/Modulo4/validateLoginLogout.js"></script>
+
+    <!-- Esto es para el zavala y para mi -->
     <script>
         let app = angular.module('nameApp', []);
 

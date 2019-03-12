@@ -107,6 +107,21 @@ public class wishlist extends HttpServlet {
             }
         }
 
+        if (action.equals("shareWishlistMasivo")) {
+            for (int i = 1; i <= 5; i++) {
+                String correo = request.getParameter("correo" + i);
+                Usuario usuario_shared = dao_usuario.getOneByCorreo(correo);
+                if (usuario_shared != null) {
+                    if (usuario_shared.getId_Usuario() != usuario.getId_Usuario()) {
+                        Wishlist wishlist = dao_wishlist.getWishlistByIDUser(usuario.getId_Usuario());
+                        dao_wishlist.shareWishlist(wishlist, usuario_shared.getId_Usuario());
+                        sendEmail(correo);
+                    }
+                }
+            }
+            out.print("success");
+        }
+
         if (action.equals("getSharedWishlist")) {
             ArrayList<Compartir_wishlist> list = dao_compartir_wishlist.getSharedWishlist(usuario.getId_Usuario());
             Gson gson = new Gson();
@@ -120,7 +135,7 @@ public class wishlist extends HttpServlet {
             String wl = gson.toJson(list);
             out.print(wl);
         }
-        
+
         if (action.equals("updateAliasSharedWishlist")) {
             Compartir_wishlist list = dao_compartir_wishlist.getSharedWishlistByID(Integer.parseInt(request.getParameter("id_compartir")));
             list.setAlias(request.getParameter("alias"));

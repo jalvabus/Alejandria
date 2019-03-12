@@ -52,6 +52,9 @@ public class auth extends HttpServlet {
                 HttpSession sesion = request.getSession();
                 sesion.setAttribute("user", usuario);
                 sesion.setAttribute("correo", nombre);
+                // Aqui se asinga el atributo logueado con lavor del id de la persona
+                sesion.setAttribute("logueado", usuario.getPersona().getIdPersona());
+                
                 System.out.println("Logueado");
                 out.println(us);
             } else {

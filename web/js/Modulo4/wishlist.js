@@ -14,6 +14,7 @@ app.controller('wishListController', ($scope, $http) => {
     $scope.sharedwishlist = {};
     $scope.sharedwishlistbyusuario = {};
     $scope.libro = {};
+    $scope.wishListCompra = [];
 
     $scope.validateLogin = function () {
         let params = "?action=authlogin";
@@ -220,6 +221,35 @@ app.controller('wishListController', ($scope, $http) => {
         }
     };
 
+    $scope.shareW = {};
+    $scope.shareWishlistMasivo = function () {
+        var action = 'shareWishlistMasivo';
+        if (Number($scope.wishlist.libros.length) > 10) {
+            swal('Oops !', "No puede compartir la wishlist, debe tener 10 libros", 'error');
+        } else {
+            $http({
+                method: 'POST',
+                url: 'wishlist',
+                data: 'action=' + action 
+                + '&correo1=' + $scope.shareW.correo1
+                + '&correo2=' + $scope.shareW.correo2
+                + '&correo3=' + $scope.shareW.correo3
+                + '&correo4=' + $scope.shareW.correo4
+                + '&correo5=' + $scope.shareW.correo5,
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+            }).then(function successCallback(response) {
+                console.log(response);
+                if (response.data === 'success') {
+                    swal('Finalizado !', 'Se han invitado exitosamente a tu lista de deseos', 'success');
+                } else {
+                    swal('Oops !', response.data, 'error');
+                }
+            }, function errorCallback(response) {
+                console.log(response);
+            });
+        }
+    };
+
     $scope.getSharedWishList = function () {
         var action = 'getSharedWishlist';
         $http(
@@ -257,9 +287,10 @@ app.controller('wishListController', ($scope, $http) => {
         });
     }
 
-    $scope.comprarLibro = function (libro) {
+    $scope.comprarLibro = function (libro, wish) {
         $scope.libro = libro;
         $scope.tipopago = 'prepago';
+        $scope.wishListCompra = wish;
     }
 
     $scope.tarjeta_prepago = {};
@@ -318,35 +349,38 @@ app.controller('wishListController', ($scope, $http) => {
         $scope.verificacionTarjeta = false;
 
         $scope.getBooksBuy();
-        $scope.validateLogin();
         $scope.getListLibros();
-        $scope.getSharedWishList();
     }
 
     $scope.compraLibro = function (libro) {
         var action = 'comprarLibro';
         var puntos = parseInt(libro.costo / 10);
         var total = libro.costo + (libro.costo * 0.16) + 150;
+        console.log($scope.wishListCompra);
+
         $http({
             method: 'POST',
             url: 'usuario',
-            data: 'action=' + action + '&numero=' + $scope.tarjeta_prepago.numero + '&id_libro=' + libro.id_libro + '&puntos=' + puntos + "&total=" + total,
+            data: 'action=' + action
+                + '&numero=' + $scope.tarjeta_prepago.numero
+                + '&id_libro=' + libro.id_libro
+                + '&puntos=' + puntos
+                + "&total=" + total + '&id_wish_list=' + $scope.wishListCompra.usuario.id_Usuario,
             headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
         }).then((response, err) => {
             console.log(response);
+
+            swal({
+                title: "Has comprado el libro " + libro.nombre,
+                text: "Ve a la seccion de tus compras",
+                icon: "success",
+                button: "Aceptar"
+            });
+
+            $scope.getBooksBuy();
+            $scope.getListLibros();
         })
 
-        swal({
-            title: "Has comprado el libro " + libro.nombre,
-            text: "Ve a la seccion de tus compras",
-            icon: "success",
-            button: "Aceptar"
-        });
-
-        $scope.getBooksBuy();
-        $scope.validateLogin();
-        $scope.getListLibros();
-        $scope.getSharedWishList();
     }
 
     $scope.getPuntos = function () {
@@ -375,6 +409,8 @@ app.controller('wishListController', ($scope, $http) => {
     $scope.mislibros = [];
     $scope.compras = [];
     $scope.getBooksBuy = function () {
+        $scope.mislibros = [];
+        $scope.compras = [];
         var action = 'getLibrosComprados';
         $http({
             method: 'POST',

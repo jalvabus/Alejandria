@@ -70,7 +70,7 @@ public class usuario extends HttpServlet {
             Libro libro = dao_libro.getLibroByID(Integer.parseInt(request.getParameter("id_libro")));
             Saldo_persona saldo = dao_usuario.getSaldoByIdPersona(usuario.getPersona().getIdPersona());
             Tarjeta_Prepago tarjeta = dao_usuario.getDatosTarjetaByIDPersona(usuario.getPersona().getIdPersona(), request.getParameter("numero"));
-            Wishlist wishlist = dao_wishlist.getWishlistByIDUser(usuario.getId_Usuario());
+            Wishlist wishlist = dao_wishlist.getWishlistByIDUser(Integer.parseInt(request.getParameter("id_wish_list")));
 
             saldo.setSaldo(saldo.getSaldo() - Float.parseFloat(request.getParameter("total")));
             saldo.setPuntos(saldo.getPuntos() + Integer.parseInt(request.getParameter("puntos")));

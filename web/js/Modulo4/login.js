@@ -24,6 +24,7 @@ app.controller('principalLoginController', ($scope, $http) => {
                 console.log(response);
                 if (data.tipo) {
                     if (String(data.tipo) === "usuario") {
+                        window.localStorage.setItem("user", "logueado");
                         location.replace('indexUser.jsp');
                     }
                 } else {

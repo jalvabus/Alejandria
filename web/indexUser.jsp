@@ -65,13 +65,13 @@
                     <li><a href="compra.jsp" onclick="DinamicoDiv('compras');">Compras</a></li>
                     <li><a href="#" onclick="DinamicoDiv('premios');">Premios</a></li>
                     <li><a href="#" onclick="DinamicoDiv('sugerencias');">Sugerencias</a></li>
-                    <li><a href="wishlist.jsp" >Wishlist</a></li>
+                    <li><a href="wishlist.jsp">Wishlist</a></li>
                     <li><a href="indexGeneral.jsp">Salir</a></li>
-                    
+
                     <select class="form-control">
                         <option> Tipo de pago </option>
                         <option val="prepago">Tarjeta Prepag</option>
-                    
+
                 </ul>
             </div>
 
@@ -119,12 +119,12 @@
                                 <div class="blog-post-des">
                                     <div class="blog-comment-form">
                                         <p>
-                                            <input type="text" class="form-control" placeholder="Ingrese tarjeta" id="tar"
-                                                required>
+                                            <input type="text" class="form-control" placeholder="Ingrese tarjeta"
+                                                id="tar" required>
                                         </p>
                                         <div class="col-md-3 col-sm-4">
-                                            <input name="submit" type="button" class="form-control" id="actTar" value="Abonar"
-                                                onclick="enviarTarjeta1();"><br>
+                                            <input name="submit" type="button" class="form-control" id="actTar"
+                                                value="Abonar" onclick="enviarTarjeta1();"><br>
                                         </div>
                                     </div>
                                     <!-- designar un div que traer� la respuesta de la insercion del nuevo evento-->
@@ -149,14 +149,16 @@
                             <div class="blog-post-thumb">
                                 <div class="blog-post-video">
                                     <div class="embed-responsive embed-responsive-16by9">
-                                        <iframe class="embed-responsive-item" src="" allowfullscreen></iframe><!-- Aqui la va url del video de youtube -->
+                                        <iframe class="embed-responsive-item" src="" allowfullscreen></iframe>
+                                        <!-- Aqui la va url del video de youtube -->
                                     </div>
                                 </div>
                                 <div class="blog-post-title">
                                     <h3><a href="single-post.html">Nam interdum maximus dolor faucibus</a></h3>
                                 </div>
                                 <div class="blog-post-format">
-                                    <span><a href="#"><img src="images/author-image1.jpg" class="img-responsive img-circle">
+                                    <span><a href="#"><img src="images/author-image1.jpg"
+                                                class="img-responsive img-circle">
                                             Jen Lopez</a></span>
                                     <span><i class="fa fa-date"></i> May 30, 2017</span>
                                     <span><a href="#"><i class="fa fa-comment-o"></i> 63 Comments</a></span>
@@ -183,7 +185,8 @@
                                     <h3><a href="single-post.html">The ingredients that make a great burger</a></h3>
                                 </div>
                                 <div class="blog-post-format">
-                                    <span><a href="#"><img src="images/author-image2.jpg" class="img-responsive img-circle">
+                                    <span><a href="#"><img src="images/author-image2.jpg"
+                                                class="img-responsive img-circle">
                                             Leo Dennis</a></span>
                                     <span><i class="fa fa-date"></i> April 18, 2017</span>
                                     <span><a href="#"><i class="fa fa-comment-o"></i> 124 Comments</a></span>
@@ -210,7 +213,8 @@
                                     <h3><a href="single-post.html">Vestibulum vel mauris nec ex tempus</a></h3>
                                 </div>
                                 <div class="blog-post-format">
-                                    <span><a href="#"><img src="images/author-image1.jpg" class="img-responsive img-circle">
+                                    <span><a href="#"><img src="images/author-image1.jpg"
+                                                class="img-responsive img-circle">
                                             Jen Lopez</a></span>
                                     <span><i class="fa fa-date"></i> March 12, 2017</span>
                                     <span><a href="#"><i class="fa fa-comment-o"></i> 256 Comments</a></span>
@@ -254,10 +258,12 @@
                                 <input name="email" type="email" class="form-control" id="email" placeholder="Email">
                             </div>
                             <div class="col-md-4 col-sm-4">
-                                <input name="subject" type="text" class="form-control" id="subject" placeholder="Subject">
+                                <input name="subject" type="text" class="form-control" id="subject"
+                                    placeholder="Subject">
                             </div>
                             <div class="col-md-12 col-sm-12">
-                                <textarea name="message" rows="5" class="form-control" id="message" placeholder="Message"></textarea>
+                                <textarea name="message" rows="5" class="form-control" id="message"
+                                    placeholder="Message"></textarea>
                             </div>
                             <div class="col-md-3 col-sm-6">
                                 <input name="submit" type="submit" class="form-control" id="submit" value="Send">
@@ -357,7 +363,8 @@
 
 
                             <div class="blog-post-title">
-                                <h2>Aqui se visualizan las compras de los eventos del usuario, por clasificacion</a></h2>
+                                <h2>Aqui se visualizan las compras de los eventos del usuario, por clasificacion</a>
+                                </h2>
                             </div>
 
                             <div class="blog-post-format">
@@ -411,7 +418,8 @@
                             <div class="blog-author">
                                 <div class="media">
                                     <div class="media-object pull-left">
-                                        <img src="images/author-image1.jpg" class="img-circle img-responsive" alt="blog">
+                                        <img src="images/author-image1.jpg" class="img-circle img-responsive"
+                                            alt="blog">
                                     </div>
                                     <div class="media-body">
                                         <h3 class="media-heading"><a href="#">Jen Lopez ( Designer )</a></h3>
@@ -426,19 +434,22 @@
                                 <h3>Comments</h3>
                                 <div class="media">
                                     <div class="media-object pull-left">
-                                        <img src="images/comment-image1.jpg" class="img-responsive img-circle" alt="Blog Image 11">
+                                        <img src="images/comment-image1.jpg" class="img-responsive img-circle"
+                                            alt="Blog Image 11">
                                     </div>
                                     <div class="media-body">
                                         <h3 class="media-heading">David Jones</h3>
                                         <span>3 days ago</span>
                                         <p>Aliquam gravida arcu at risus blandit, in interdum metus varius. Cras
                                             efficitur, ex sit amet tincidunt rhoncus, dui ex hendrerit risus, ac
-                                            dapibus ligula mi id leo. In auctor dui justo, ac consequat dui posuere ac.</p>
+                                            dapibus ligula mi id leo. In auctor dui justo, ac consequat dui posuere ac.
+                                        </p>
                                     </div>
                                 </div>
                                 <div class="media">
                                     <div class="media-object pull-left">
-                                        <img src="images/comment-image2.jpg" class="img-responsive img-circle" alt="Blog Image 22">
+                                        <img src="images/comment-image2.jpg" class="img-responsive img-circle"
+                                            alt="Blog Image 22">
                                     </div>
                                     <div class="media-body">
                                         <h3 class="media-heading">Omar Larus</h3>
@@ -449,7 +460,8 @@
                                 </div>
                                 <div class="media">
                                     <div class="media-object pull-left">
-                                        <img src="images/author-image2.jpg" class="img-responsive img-circle" alt="Blog Image 33">
+                                        <img src="images/author-image2.jpg" class="img-responsive img-circle"
+                                            alt="Blog Image 33">
                                     </div>
                                     <div class="media-body">
                                         <h3 class="media-heading">Walker Jen</h3>
@@ -461,7 +473,8 @@
                                 </div>
                                 <div class="media">
                                     <div class="media-object pull-left">
-                                        <img src="images/author-image1.jpg" class="img-responsive img-circle" alt="Blog Image 44">
+                                        <img src="images/author-image1.jpg" class="img-responsive img-circle"
+                                            alt="Blog Image 44">
                                     </div>
                                     <div class="media-body">
                                         <h3 class="media-heading">Jen Lopez</h3>
@@ -478,10 +491,11 @@
                                 <form action="#" method="post">
                                     <input type="text" class="form-control" placeholder="Name" name="name" required>
                                     <input type="email" class="form-control" placeholder="Email" name="email" required>
-                                    <textarea name="message" rows="5" class="form-control" id="message" placeholder="Message"
-                                        message="message" required="required"></textarea>
+                                    <textarea name="message" rows="5" class="form-control" id="message"
+                                        placeholder="Message" message="message" required="required"></textarea>
                                     <div class="col-md-3 col-sm-4">
-                                        <input name="submit" type="submit" class="form-control" id="submit" value="Post Your Comment">
+                                        <input name="submit" type="submit" class="form-control" id="submit"
+                                            value="Post Your Comment">
                                     </div>
                                 </form>
                             </div>
@@ -579,7 +593,8 @@
                                 </a>
                             </div>
                             <div class="blog-post-title">
-                                <h3><a href="single-post.html">Aqui el usuario manda una sugerencia al administrador</a></h3>
+                                <h3><a href="single-post.html">Aqui el usuario manda una sugerencia al administrador</a>
+                                </h3>
                             </div>
                             <div class="blog-post-format">
                                 <span><a href="#"><img src="images/author-image1.jpg" class="img-responsive img-circle">
@@ -625,7 +640,8 @@
                         <div class="blog-post-thumb">
                             <div class="blog-post-video">
                                 <div class="embed-responsive embed-responsive-16by9">
-                                    <iframe class="embed-responsive-item" src="" allowfullscreen></iframe><!-- Aqui la va url del video de youtube -->
+                                    <iframe class="embed-responsive-item" src="" allowfullscreen></iframe>
+                                    <!-- Aqui la va url del video de youtube -->
                                 </div>
                             </div>
                             <div class="blog-post-title">
@@ -767,6 +783,9 @@
     <script src="js/jquery.parallax.js"></script>
     <script src="js/smoothscroll.js"></script>
     <script src="js/custom.js"></script>
+
+    <!-- SCRIPT PARA VALIDAR EL LOGIN -->
+    <script src="js/Modulo4/validateLoginLogout.js"></script>
 
 </body>
 
